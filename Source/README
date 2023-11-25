@@ -1,0 +1,21 @@
+# University of California, Berkeley
+# Chem 274B: Software Engineering Fundamentals 
+# for Molecular Sciences
+# December 2023 - Final Project
+# 
+# Creator: Francine Bianca Oca, Kassady Marasigan, Korede Ogundele
+# Date Created: November 15, 2023
+#
+# Directory Path: CHEM274B-FINALPROJECT/Source/
+
+This subdirectory contain C++ implementations of 
+a cellular automata that models allele frequencies over 
+generations of a population. 
+
+LIST OF FILES IN THIS DIRECTORY:
+- README: (is this file)
+
+- Makefile: Shortcut commands that allows for compilation of allelefreq.cpp as well as its object file creation.
+
+- allelefreq.cpp: C++ implementation of a cellular automata that models allele frequencies over 
+generations of a population.
