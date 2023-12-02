@@ -12,8 +12,9 @@
 // way to associate constant values with names to make code more readable and maintainable
 enum class Phenotype
 {
-    Dominant, // Dominant phenotype (assumed to be heterozygous)
-    Recessive // Recessive phenotype
+    HomozygousDominant,     // Homozygous dominant phenotype (if both parents are dominant)
+    Heterozygous,           // Heterozygous (if one parent is dominant and one parent is recessive)
+    HomozygousRecessive     // Homozygous recessive phenotype (if both parents are dominant)
 };
 
 // Operations that determine the phenotype of the offspring
