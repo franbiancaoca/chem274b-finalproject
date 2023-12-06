@@ -6,20 +6,49 @@
 // RULES: Operations that determine the phenotype of the offspring
 Phenotype determine_phenotype(Phenotype parent1, Phenotype parent2)
 {
-    // Both parents are recessive, offspring will be recessive
-    if (parent1 == Phenotype::Dominant && parent2 == Phenotype::Dominant)
+    // If both parents are homozygous dominant, 
+    // 100% chance offspring will be homozygous dominant
+    if (parent1 == Phenotype::HomozygousDominant && parent2 == Phenotype::HomozygousDominant)
     {
-        return Phenotype::Dominant;
+        return Phenotype::HomozygousDominant;
     }
-    // Both parents are dominant, 25% chance offspring is recessive
-    else if (parent1 == Phenotype::Dominant && parent2 == Phenotype::Recessive)
+
+    // If both parents are homozygous recessive, 
+    // 100% chance offspring will be homozygous recessive
+    else if (parent1 == Phenotype::HomozygousRecessive && parent2 == Phenotype::HomozygousRecessive)
     {
-        return rand() % 4 == 0 ? Phenotype::Dominant : Phenotype::Recessive; // 1 in 4 chance for recessive
+        return Phenotype::HomozygousRecessive;
     }
-    // One parent is dominant, other is recessive, 50% chance offspring is recessive
+
+    // If one parent is homozygous dominant and other is homozygous recessive, 
+    // 100% chance offspring will be heterozygous
+    else if (parent1 == Phenotype::HomozygousDominant && parent2 == Phenotype::HomozygousRecessive)
+    {
+        return Phenotype::Heterozygous;
+    }
+
+    // If both parents are heterozygous, 
+    // 50% chance offspring will be heterozygous, 25% homo dominant and 25% homo recessive
     else
     {
-        return rand() % 2 == 0 ? Phenotype::Dominant : Phenotype::Recessive; // 1 in 2 chance for recessive
+        // Generate random number from 0 to 1
+        double rand_value = ((double)rand() / RAND_MAX);
+
+        // 50% chance offspring will be heterozygous
+        if (rand_value < 0.5)
+        {
+            return Phenotype::Heterozygous;
+        }
+        // 25% chance offspring will be homozygous dominant
+        else if (rand_value < 0.75)
+        {
+            return Phenotype::HomozygousDominant;
+        }
+        // 25% chance offspring will be homozygous recessive
+        else
+        {
+            return Phenotype::HomozygousRecessive;
+        }
     }
 }
 
@@ -29,8 +58,21 @@ std::vector<Phenotype> initialize_population(int size, double recessive_frequenc
     std::vector<Phenotype> population(size);
     for (Phenotype &individual : population)
     {
-        individual = (static_cast<double>(rand()) / RAND_MAX < recessive_frequency) ? Phenotype::Dominant : Phenotype::Recessive;
+        double rand_value = static_cast<double>(rand()) / RAND_MAX;
+        if (rand_value < recessive_frequency)
+        {
+            individual = Phenotype::HomozygousRecessive;  // Offspring is homozygous recessive
+        }
+        else if (rand_value < 2 * recessive_frequency)
+        {
+            individual = Phenotype::Heterozygous;   // Ofspring is heterozygous
+        }
+        else
+        {
+            individual = Phenotype::HomozygousDominant; // Offspring is homozygous dominant
+        }
     }
+    
     return population;
 }
 
@@ -45,5 +87,6 @@ std::vector<Phenotype> simulate_generation(const std::vector<Phenotype> &current
         Phenotype right_parent = current_population[(i + 1) % current_population.size()]; // BOUNDARY
         next_generation[i] = determine_phenotype(left_parent, right_parent);
     }
+
     return next_generation;
 }
