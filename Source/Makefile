@@ -11,7 +11,7 @@
 CPP         = g++      # C++ Compuler
 
 # compiler flags -g debug, -O2 optimized version -c create a library object
-CPPFLAGS    = -O3 -c    
+CPPFLAGS    = -O3 -std=c++11 -c    
 
 # The directory where the include files needed to create the library objects are
 INC_DIR = ../Include
@@ -20,7 +20,7 @@ INC_DIR = ../Include
 LIB_DIR     = ../Lib
 
 # DATA_OBJS contains the current list of object files
-DATA_OBJS = allelefreq.o
+DATA_OBJS = allelefreq.o CA_model.o
 
 # DATA_LIB is the name of object library file that will contain all
 # DATA_OBJS files
@@ -30,6 +30,9 @@ DATA_LIB = libcellularautomata.a
 # Compilation and creation of object file for adjacency list class
 allelefreq.o: $(INC_DIR)/cellularautomata.h	
 	$(CPP) $(CPPFLAGS) allelefreq.cpp -I$(INC_DIR)
+
+CA_model.o: $(INC_DIR)/general_CA.h	
+	$(CPP) $(CPPFLAGS) CA_model.cpp -I$(INC_DIR)
 
 # The following target creates a static library (a collection of
 # linkable object files). After all the object files in DATA_OBJS have been archived
