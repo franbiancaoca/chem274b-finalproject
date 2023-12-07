@@ -1,100 +1,100 @@
-Generation 0: Recessive count = 320, Dominant count = 180
-Generation 1: Recessive count = 281, Dominant count = 219
-Generation 2: Recessive count = 261, Dominant count = 239
-Generation 3: Recessive count = 204, Dominant count = 296
-Generation 4: Recessive count = 167, Dominant count = 333
-Generation 5: Recessive count = 136, Dominant count = 364
-Generation 6: Recessive count = 112, Dominant count = 388
-Generation 7: Recessive count = 99, Dominant count = 401
-Generation 8: Recessive count = 101, Dominant count = 399
-Generation 9: Recessive count = 88, Dominant count = 412
-Generation 10: Recessive count = 82, Dominant count = 418
-Generation 11: Recessive count = 74, Dominant count = 426
-Generation 12: Recessive count = 58, Dominant count = 442
-Generation 13: Recessive count = 54, Dominant count = 446
-Generation 14: Recessive count = 49, Dominant count = 451
-Generation 15: Recessive count = 44, Dominant count = 456
-Generation 16: Recessive count = 37, Dominant count = 463
-Generation 17: Recessive count = 29, Dominant count = 471
-Generation 18: Recessive count = 24, Dominant count = 476
-Generation 19: Recessive count = 22, Dominant count = 478
-Generation 20: Recessive count = 18, Dominant count = 482
-Generation 21: Recessive count = 16, Dominant count = 484
-Generation 22: Recessive count = 12, Dominant count = 488
-Generation 23: Recessive count = 9, Dominant count = 491
-Generation 24: Recessive count = 7, Dominant count = 493
-Generation 25: Recessive count = 7, Dominant count = 493
-Generation 26: Recessive count = 7, Dominant count = 493
-Generation 27: Recessive count = 7, Dominant count = 493
-Generation 28: Recessive count = 9, Dominant count = 491
-Generation 29: Recessive count = 7, Dominant count = 493
-Generation 30: Recessive count = 8, Dominant count = 492
-Generation 31: Recessive count = 6, Dominant count = 494
-Generation 32: Recessive count = 5, Dominant count = 495
-Generation 33: Recessive count = 4, Dominant count = 496
-Generation 34: Recessive count = 1, Dominant count = 499
-Generation 35: Recessive count = 2, Dominant count = 498
-Generation 36: Recessive count = 2, Dominant count = 498
-Generation 37: Recessive count = 1, Dominant count = 499
-Generation 38: Recessive count = 2, Dominant count = 498
-Generation 39: Recessive count = 2, Dominant count = 498
-Generation 40: Recessive count = 3, Dominant count = 497
-Generation 41: Recessive count = 1, Dominant count = 499
-Generation 42: Recessive count = 1, Dominant count = 499
-Generation 43: Recessive count = 0, Dominant count = 500
-Generation 44: Recessive count = 0, Dominant count = 500
-Generation 45: Recessive count = 0, Dominant count = 500
-Generation 46: Recessive count = 0, Dominant count = 500
-Generation 47: Recessive count = 0, Dominant count = 500
-Generation 48: Recessive count = 0, Dominant count = 500
-Generation 49: Recessive count = 0, Dominant count = 500
-Generation 50: Recessive count = 0, Dominant count = 500
-Generation 51: Recessive count = 0, Dominant count = 500
-Generation 52: Recessive count = 0, Dominant count = 500
-Generation 53: Recessive count = 0, Dominant count = 500
-Generation 54: Recessive count = 0, Dominant count = 500
-Generation 55: Recessive count = 0, Dominant count = 500
-Generation 56: Recessive count = 0, Dominant count = 500
-Generation 57: Recessive count = 0, Dominant count = 500
-Generation 58: Recessive count = 0, Dominant count = 500
-Generation 59: Recessive count = 0, Dominant count = 500
-Generation 60: Recessive count = 0, Dominant count = 500
-Generation 61: Recessive count = 0, Dominant count = 500
-Generation 62: Recessive count = 0, Dominant count = 500
-Generation 63: Recessive count = 0, Dominant count = 500
-Generation 64: Recessive count = 0, Dominant count = 500
-Generation 65: Recessive count = 0, Dominant count = 500
-Generation 66: Recessive count = 0, Dominant count = 500
-Generation 67: Recessive count = 0, Dominant count = 500
-Generation 68: Recessive count = 0, Dominant count = 500
-Generation 69: Recessive count = 0, Dominant count = 500
-Generation 70: Recessive count = 0, Dominant count = 500
-Generation 71: Recessive count = 0, Dominant count = 500
-Generation 72: Recessive count = 0, Dominant count = 500
-Generation 73: Recessive count = 0, Dominant count = 500
-Generation 74: Recessive count = 0, Dominant count = 500
-Generation 75: Recessive count = 0, Dominant count = 500
-Generation 76: Recessive count = 0, Dominant count = 500
-Generation 77: Recessive count = 0, Dominant count = 500
-Generation 78: Recessive count = 0, Dominant count = 500
-Generation 79: Recessive count = 0, Dominant count = 500
-Generation 80: Recessive count = 0, Dominant count = 500
-Generation 81: Recessive count = 0, Dominant count = 500
-Generation 82: Recessive count = 0, Dominant count = 500
-Generation 83: Recessive count = 0, Dominant count = 500
-Generation 84: Recessive count = 0, Dominant count = 500
-Generation 85: Recessive count = 0, Dominant count = 500
-Generation 86: Recessive count = 0, Dominant count = 500
-Generation 87: Recessive count = 0, Dominant count = 500
-Generation 88: Recessive count = 0, Dominant count = 500
-Generation 89: Recessive count = 0, Dominant count = 500
-Generation 90: Recessive count = 0, Dominant count = 500
-Generation 91: Recessive count = 0, Dominant count = 500
-Generation 92: Recessive count = 0, Dominant count = 500
-Generation 93: Recessive count = 0, Dominant count = 500
-Generation 94: Recessive count = 0, Dominant count = 500
-Generation 95: Recessive count = 0, Dominant count = 500
-Generation 96: Recessive count = 0, Dominant count = 500
-Generation 97: Recessive count = 0, Dominant count = 500
-Generation 98: Recessive count = 0, Dominant count = 500
-Generation 99: Recessive count = 0, Dominant count = 500
+Generation 0: Dominant count = 53, Heterozygous count = 27, Recessive count = 20
+Generation 1: Dominant count = 45, Heterozygous count = 36, Recessive count = 19
+Generation 2: Dominant count = 43, Heterozygous count = 39, Recessive count = 18
+Generation 3: Dominant count = 40, Heterozygous count = 32, Recessive count = 28
+Generation 4: Dominant count = 40, Heterozygous count = 39, Recessive count = 21
+Generation 5: Dominant count = 47, Heterozygous count = 28, Recessive count = 25
+Generation 6: Dominant count = 43, Heterozygous count = 38, Recessive count = 19
+Generation 7: Dominant count = 42, Heterozygous count = 29, Recessive count = 29
+Generation 8: Dominant count = 48, Heterozygous count = 27, Recessive count = 25
+Generation 9: Dominant count = 41, Heterozygous count = 44, Recessive count = 15
+Generation 10: Dominant count = 39, Heterozygous count = 31, Recessive count = 30
+Generation 11: Dominant count = 40, Heterozygous count = 35, Recessive count = 25
+Generation 12: Dominant count = 36, Heterozygous count = 40, Recessive count = 24
+Generation 13: Dominant count = 38, Heterozygous count = 44, Recessive count = 18
+Generation 14: Dominant count = 30, Heterozygous count = 49, Recessive count = 21
+Generation 15: Dominant count = 31, Heterozygous count = 44, Recessive count = 25
+Generation 16: Dominant count = 32, Heterozygous count = 42, Recessive count = 26
+Generation 17: Dominant count = 28, Heterozygous count = 49, Recessive count = 23
+Generation 18: Dominant count = 29, Heterozygous count = 47, Recessive count = 24
+Generation 19: Dominant count = 37, Heterozygous count = 40, Recessive count = 23
+Generation 20: Dominant count = 30, Heterozygous count = 40, Recessive count = 30
+Generation 21: Dominant count = 24, Heterozygous count = 40, Recessive count = 36
+Generation 22: Dominant count = 24, Heterozygous count = 42, Recessive count = 34
+Generation 23: Dominant count = 31, Heterozygous count = 36, Recessive count = 33
+Generation 24: Dominant count = 28, Heterozygous count = 42, Recessive count = 30
+Generation 25: Dominant count = 36, Heterozygous count = 37, Recessive count = 27
+Generation 26: Dominant count = 32, Heterozygous count = 43, Recessive count = 25
+Generation 27: Dominant count = 42, Heterozygous count = 34, Recessive count = 24
+Generation 28: Dominant count = 32, Heterozygous count = 41, Recessive count = 27
+Generation 29: Dominant count = 37, Heterozygous count = 36, Recessive count = 27
+Generation 30: Dominant count = 34, Heterozygous count = 46, Recessive count = 20
+Generation 31: Dominant count = 37, Heterozygous count = 40, Recessive count = 23
+Generation 32: Dominant count = 32, Heterozygous count = 47, Recessive count = 21
+Generation 33: Dominant count = 33, Heterozygous count = 39, Recessive count = 28
+Generation 34: Dominant count = 31, Heterozygous count = 44, Recessive count = 25
+Generation 35: Dominant count = 31, Heterozygous count = 44, Recessive count = 25
+Generation 36: Dominant count = 36, Heterozygous count = 42, Recessive count = 22
+Generation 37: Dominant count = 38, Heterozygous count = 34, Recessive count = 28
+Generation 38: Dominant count = 30, Heterozygous count = 45, Recessive count = 25
+Generation 39: Dominant count = 31, Heterozygous count = 47, Recessive count = 22
+Generation 40: Dominant count = 32, Heterozygous count = 44, Recessive count = 24
+Generation 41: Dominant count = 35, Heterozygous count = 40, Recessive count = 25
+Generation 42: Dominant count = 33, Heterozygous count = 38, Recessive count = 29
+Generation 43: Dominant count = 30, Heterozygous count = 42, Recessive count = 28
+Generation 44: Dominant count = 28, Heterozygous count = 52, Recessive count = 20
+Generation 45: Dominant count = 37, Heterozygous count = 38, Recessive count = 25
+Generation 46: Dominant count = 27, Heterozygous count = 49, Recessive count = 24
+Generation 47: Dominant count = 35, Heterozygous count = 45, Recessive count = 20
+Generation 48: Dominant count = 25, Heterozygous count = 51, Recessive count = 24
+Generation 49: Dominant count = 29, Heterozygous count = 49, Recessive count = 22
+Generation 50: Dominant count = 29, Heterozygous count = 40, Recessive count = 31
+Generation 51: Dominant count = 32, Heterozygous count = 37, Recessive count = 31
+Generation 52: Dominant count = 22, Heterozygous count = 49, Recessive count = 29
+Generation 53: Dominant count = 29, Heterozygous count = 46, Recessive count = 25
+Generation 54: Dominant count = 33, Heterozygous count = 45, Recessive count = 22
+Generation 55: Dominant count = 35, Heterozygous count = 43, Recessive count = 22
+Generation 56: Dominant count = 28, Heterozygous count = 42, Recessive count = 30
+Generation 57: Dominant count = 24, Heterozygous count = 41, Recessive count = 35
+Generation 58: Dominant count = 34, Heterozygous count = 40, Recessive count = 26
+Generation 59: Dominant count = 28, Heterozygous count = 46, Recessive count = 26
+Generation 60: Dominant count = 33, Heterozygous count = 37, Recessive count = 30
+Generation 61: Dominant count = 31, Heterozygous count = 35, Recessive count = 34
+Generation 62: Dominant count = 30, Heterozygous count = 43, Recessive count = 27
+Generation 63: Dominant count = 36, Heterozygous count = 38, Recessive count = 26
+Generation 64: Dominant count = 40, Heterozygous count = 32, Recessive count = 28
+Generation 65: Dominant count = 38, Heterozygous count = 44, Recessive count = 18
+Generation 66: Dominant count = 37, Heterozygous count = 44, Recessive count = 19
+Generation 67: Dominant count = 40, Heterozygous count = 37, Recessive count = 23
+Generation 68: Dominant count = 32, Heterozygous count = 49, Recessive count = 19
+Generation 69: Dominant count = 32, Heterozygous count = 46, Recessive count = 22
+Generation 70: Dominant count = 34, Heterozygous count = 43, Recessive count = 23
+Generation 71: Dominant count = 33, Heterozygous count = 42, Recessive count = 25
+Generation 72: Dominant count = 36, Heterozygous count = 45, Recessive count = 19
+Generation 73: Dominant count = 32, Heterozygous count = 43, Recessive count = 25
+Generation 74: Dominant count = 27, Heterozygous count = 48, Recessive count = 25
+Generation 75: Dominant count = 20, Heterozygous count = 48, Recessive count = 32
+Generation 76: Dominant count = 28, Heterozygous count = 39, Recessive count = 33
+Generation 77: Dominant count = 29, Heterozygous count = 36, Recessive count = 35
+Generation 78: Dominant count = 27, Heterozygous count = 41, Recessive count = 32
+Generation 79: Dominant count = 26, Heterozygous count = 38, Recessive count = 36
+Generation 80: Dominant count = 24, Heterozygous count = 47, Recessive count = 29
+Generation 81: Dominant count = 22, Heterozygous count = 52, Recessive count = 26
+Generation 82: Dominant count = 27, Heterozygous count = 45, Recessive count = 28
+Generation 83: Dominant count = 23, Heterozygous count = 49, Recessive count = 28
+Generation 84: Dominant count = 28, Heterozygous count = 41, Recessive count = 31
+Generation 85: Dominant count = 16, Heterozygous count = 59, Recessive count = 25
+Generation 86: Dominant count = 26, Heterozygous count = 45, Recessive count = 29
+Generation 87: Dominant count = 29, Heterozygous count = 45, Recessive count = 26
+Generation 88: Dominant count = 29, Heterozygous count = 45, Recessive count = 26
+Generation 89: Dominant count = 28, Heterozygous count = 43, Recessive count = 29
+Generation 90: Dominant count = 28, Heterozygous count = 48, Recessive count = 24
+Generation 91: Dominant count = 27, Heterozygous count = 52, Recessive count = 21
+Generation 92: Dominant count = 29, Heterozygous count = 49, Recessive count = 22
+Generation 93: Dominant count = 23, Heterozygous count = 48, Recessive count = 29
+Generation 94: Dominant count = 20, Heterozygous count = 48, Recessive count = 32
+Generation 95: Dominant count = 30, Heterozygous count = 32, Recessive count = 38
+Generation 96: Dominant count = 24, Heterozygous count = 49, Recessive count = 27
+Generation 97: Dominant count = 23, Heterozygous count = 46, Recessive count = 31
+Generation 98: Dominant count = 29, Heterozygous count = 36, Recessive count = 35
+Generation 99: Dominant count = 28, Heterozygous count = 43, Recessive count = 29
