@@ -23,7 +23,7 @@ int main()
         // Count phenotypes in the current generation
         int homozygous_dominant_count = std::count(population.begin(), population.end(), Phenotype::HomozygousDominant);
         int heterozygous_count = std::count(population.begin(), population.end(), Phenotype::Heterozygous);
-        int homozygous_recessive_count = std::count(population.begin(), population.end(), Phenotype::HomozygousRecessive);
+        int homozygous_recessive_count = std::count(population.begin(), population.end(), Phenotype::Recessive);
 
         std::cout << "Generation " << generation << ": "
                   << "Dominant count = " << homozygous_dominant_count << ", "
