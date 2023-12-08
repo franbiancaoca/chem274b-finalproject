@@ -14,7 +14,7 @@ enum class Phenotype
 {
     HomozygousDominant,     // Homozygous dominant phenotype (if both parents are dominant)
     Heterozygous,           // Heterozygous (if one parent is dominant and one parent is recessive)
-    HomozygousRecessive     // Homozygous recessive phenotype (if both parents are dominant)
+    Recessive               // Recessive phenotype (if both parents are dominant)
 };
 
 // Operations that determine the phenotype of the offspring
