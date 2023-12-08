@@ -1,6 +1,15 @@
+// CHEM 274B: Software Engineering Fundamentals for Molecular Sciences
+// Creator: Francine Bianca Oca, Kassady Marasigan, Korede Ogundele
+//
+// This file contains the general purpose library used to
+// model cellular automata. For our case, this general purpose
+// library will be used to model allele frequency changes over
+// generations for a population.
+
 #include <iostream>
 #include <vector>
 #include <random>
+#include <functional>
 #include "general_CA.h"
 
 // Default Constructor
@@ -60,7 +69,7 @@ std::string CA_model::setup_states(std::string state)
 }
 
 // Initial Configuration
-int CA_model::CA_init_cond(int x_state, double prob)
+int CA_model::CA_init_cond(int state, double prob)
 {
     if (rows == 0 || columns == 0)
     {
@@ -74,9 +83,9 @@ int CA_model::CA_init_cond(int x_state, double prob)
         return -1;
     }
 
-    std::random_device rd;                  // Random device
-    std::mt19937 gen(rd());                 // Mersenne Twister generator
-    std::bernoulli_distribution dist(prob); // Bernoulli distribution
+    std::random_device rd;                  
+    std::mt19937 gen(rd());                 
+    std::bernoulli_distribution dist(prob);
 
     // Iterate over each cell in the grid
     for (int i = 0; i < rows; ++i)
@@ -84,12 +93,28 @@ int CA_model::CA_init_cond(int x_state, double prob)
         for (int j = 0; j < columns; ++j)
         {
             if (dist(gen))
-            { // With probability 'prob', set the cell to 'x_state'
-                allele_data[i][j] = static_cast<CellState>(x_state);
+            { // With probability 'prob', set the cell to 'state'
+                allele_data[i][j] = static_cast<CellState>(state);
             }
-            // Else, leave the cell in its default state
+            // Else -> default state
         }
     }
 
-    return 0; // Successful initialization
+    return 0; // Initialization is a success!
+}
+
+// Setup Rules
+void CA_model::set_straight_conditional(function<CellState(CellState)> rule)
+{
+    straight_conditional = rule;
+}
+
+void CA_model::set_conditional_neighbor(function<CellState(CellState, const vector<CellState> &)> rule)
+{
+    conditional_neighbor = rule;
+}
+
+void CA_model::set_majority_rule(function<CellState(const vector<CellState> &)> rule)
+{
+    majority_rule = rule;
 }
