@@ -14,24 +14,25 @@
 #include <functional>
 using namespace std;
 
-enum class CellState
+enum class Phenotype
 {
     // Representing state of alleles
-    Homozygous_Dominant,
-    Heterozygous_Dominant
+    HomozygousDominant,
+    Heterozygous,
+    HomozygousRecessive
 };
-using Allele = CellState;
+using Allele = Phenotype;
 
 class CA_model
 {
 protected:
     int rows, columns;                               // Rows and columns for dimensions
     int size;                                        // Size of CA model
-    std::vector<std::vector<CellState> > allele_data; // Vector that will hold the allele data for the grid
+    std::vector<std::vector<Phenotype>> allele_data; // Vector that will hold the allele data for the grid
     std::string genotype;                            // Genotype
-    function<CellState(CellState)> straight_conditional; // Straight Conditional Transition Rule
-    function<CellState(CellState, const vector<CellState> &)> conditional_neighbor; // Conditional Neighbor Rule
-    function<CellState(const vector<CellState> &)> majority_rule; // Majority Rule 
+    function<Phenotype(Phenotype)> straight_conditional;                            // Straight Conditional Transition Rule
+    function<Phenotype(Phenotype, const vector<Phenotype> &)> conditional_neighbor; // Conditional Neighbor Rule
+    function<Phenotype(const vector<Phenotype> &)> majority_rule;                   // Majority Rule
 
 public:
     // Default Constructor
@@ -44,7 +45,7 @@ public:
     CA_model(int ndims, int dim1, int dim2);
 
     // Neighborhood Setup
-    std::vector<int> setup_vonneumann(int x, int y);
+    std::vector<Phenotype> setup_vonneumann(int x, int y);
 
     // Setup Genotype
     std::string setup_states(std::string state);
@@ -53,7 +54,22 @@ public:
     int CA_init_cond(int x_state, double prob);
 
     // Setup Rules
-    void set_straight_conditional(function<CellState(CellState)> rule);
-    void set_conditional_neighbor(function<CellState(CellState, const vector<CellState> &)> rule);
-    void set_majority_rule(function<CellState(const vector<CellState> &)> rule);
+    void set_straight_conditional(function<Phenotype(Phenotype)> rule);
+    void set_conditional_neighbor(function<Phenotype(Phenotype, const vector<Phenotype> &)> rule);
+    void set_majority_rule(function<Phenotype(const vector<Phenotype> &)> rule);
+
+    // Updates the grid based on rules
+    void update_grid();
 };
+
+// Operations that determine the phenotype of the offspring
+Phenotype determine_phenotype(Phenotype parent1, Phenotype parent2);
+
+// Initialization of population with a given starting allele frequency
+std::vector<Phenotype> initialize_population(int size, double recessive_frequency);
+
+// Simulates one generation and this is the
+// implementation of the VON NEUMAN NEIGHBORHOOD!
+std::vector<Phenotype> simulate_generation(const std::vector<Phenotype> &current_population);
+
+std::function<Phenotype(Phenotype, const std::vector<Phenotype> &)> get_generation_rule();

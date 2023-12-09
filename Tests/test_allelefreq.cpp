@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
-#include "cellularautomata.h"
+#include "general_CA.h"
 
 int main()
 {

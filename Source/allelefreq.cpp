@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include "cellularautomata.h"
+#include "general_CA.h"
 
 // RULES: Operations that determine the phenotype of the offspring
 Phenotype determine_phenotype(Phenotype parent1, Phenotype parent2)
