@@ -15,14 +15,24 @@ Genotype determine_genotype(Genotype parent1, Genotype parent2)
 
     // If both parents are recessive, 
     // 100% chance offspring will be recessive
+
+    else if (parent1 == Phenotype::HomozygousRecessive && parent2 == Phenotype::HomozygousRecessive)
+    {
+        return Phenotype::HomozygousRecessive;
+
     else if (parent1 == Genotype::Recessive && parent2 == Genotype::Recessive)
     {
         return Genotype::Recessive;
+
     }
 
     // If one parent is homozygous dominant and other is recessive, 
     // 100% chance offspring will be heterozygous
+
+    else if (parent1 == Phenotype::HomozygousDominant && parent2 == Phenotype::HomozygousRecessive)
+
     else if (parent1 == Genotype::HomozygousDominant && parent2 == Genotype::Recessive)
+
     {
         return Genotype::Heterozygous;
     }
@@ -47,7 +57,11 @@ Genotype determine_genotype(Genotype parent1, Genotype parent2)
         // 25% chance offspring will be recessive
         else
         {
+
+            return Phenotype::HomozygousRecessive;
+
             return Genotype::Recessive;
+
         }
     }
 }
@@ -61,7 +75,11 @@ std::vector<Genotype> initialize_population(int size, double recessive_frequency
         double rand_value = static_cast<double>(rand()) / RAND_MAX;
         if (rand_value < recessive_frequency)
         {
+
+            individual = Phenotype::HomozygousRecessive;  // Offspring is recessive
+
             individual = Genotype::Recessive;  // Offspring is recessive
+
         }
         else if (rand_value < 2 * recessive_frequency)
         {
