@@ -26,13 +26,15 @@ using Allele = Phenotype;
 class CA_model
 {
 protected:
-    int rows, columns;                               // Rows and columns for dimensions
-    int size;                                        // Size of CA model
-    std::vector<std::vector<Phenotype>> allele_data; // Vector that will hold the allele data for the grid
-    std::string genotype;                            // Genotype
+    int rows, columns;                                                              // Rows and columns for dimensions
+    int size;                                                                       // Size of CA model
+    std::vector<std::vector<Phenotype>> allele_data;                                // Vector that will hold the allele data for the grid
+    std::string genotype;                                                           // Genotype
     function<Phenotype(Phenotype)> straight_conditional;                            // Straight Conditional Transition Rule
     function<Phenotype(Phenotype, const vector<Phenotype> &)> conditional_neighbor; // Conditional Neighbor Rule
     function<Phenotype(const vector<Phenotype> &)> majority_rule;                   // Majority Rule
+    std::vector<std::vector<Phenotype>> current_state;                              // Current state at time t
+    std::vector<std::vector<Phenotype>> updated_state;                              // Updated state at time t+1
 
 public:
     // Default Constructor

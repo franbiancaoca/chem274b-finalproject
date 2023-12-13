@@ -9,7 +9,7 @@
 # the ../Bin subdirectory
 
 # GNU C++ Compiler
-CPP         = g++      
+CPP         = g++   
 
 # compiler flags -g debug, -O2 optimized version -c create a library object
 CPPFLAGS    = -O3 -std=c++11 -o

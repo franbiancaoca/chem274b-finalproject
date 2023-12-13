@@ -121,29 +121,31 @@ void CA_model::update_grid()
     int count_heterozygous = 0;
     int count_homozygous_dominant = 0;
     std::vector<std::vector<Phenotype>> grid = allele_data;
+    updated_state = current_state;   // Use current_state as the base for updating
 
     for (int i = 0; i < rows; ++i)
     {
         for (int j = 0; j < columns; ++j)
         {
-            Phenotype current_state = allele_data[i][j];
+            Phenotype current_state_cell = current_state[i][j];
             std::vector<Phenotype> neighbors = setup_vonneumann(i, j);
 
-            // Apply rules
+            // Apply rules using the current state
             if (straight_conditional)
             {
-                grid[i][j] = straight_conditional(current_state);
+                updated_state[i][j] = straight_conditional(current_state_cell);
             }
             if (conditional_neighbor)
             {
-                grid[i][j] = conditional_neighbor(current_state, neighbors);
+                updated_state[i][j] = conditional_neighbor(current_state_cell, neighbors);
             }
             if (majority_rule)
             {
-                grid[i][j] = majority_rule(neighbors);
+                updated_state[i][j] = majority_rule(neighbors);
             }
 
-            switch (grid[i][j])
+            // Count the phenotypes for output
+            switch (updated_state[i][j])
             {
             case Phenotype::HomozygousRecessive:
                 count_homozygous_recessive++;
@@ -160,7 +162,11 @@ void CA_model::update_grid()
 
     allele_data = grid;
 
+    // Print counts or handle as needed
     std::cout << "Homozygous Dominant: " << count_homozygous_dominant
               << ", Heterozygous: " << count_heterozygous
               << ", Homozygous Recessive: " << count_homozygous_recessive << std::endl;
+
+    // Swap the grids making the updated_state the current_state for the next iteration
+    std::swap(current_state, updated_state);
 }
