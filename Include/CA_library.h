@@ -60,6 +60,8 @@ class CellularAutomata
         int k;                                  // state k to be used in rules
         int kprime;                             // state k' to be used in rules
         std::vector<std::vector<int>> grid;     // grid of the CA
+        using RuleFunction = void (CellularAutomata::*)(); // Define a function pointer type for rules
+        std::vector<RuleFunction> rules;                   // Vector to store rule functions
 
     public:
         CellularAutomata();         // Default constructor
@@ -76,6 +78,7 @@ class CellularAutomata
         void set_grid(const std::vector<std::vector<int>>& grid);
         void set_k(int k_state);
         void set_kprime(int kprime_state);
+        void add_rule(RuleFunction rule);
 
         // Getter methods for CA attributes
         DimensionType get_dimensions() const;
