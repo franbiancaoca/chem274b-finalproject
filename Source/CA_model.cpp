@@ -27,7 +27,7 @@ int CA_model::CA_setup_dimension(int ndims, int ndim1, int ndim2)
     columns = ndim1;
     rows = ndim2;
     size = rows * columns;
-    allele_data.resize(rows, std::vector<Phenotype>(columns, Phenotype::HomozygousDominant));
+    allele_data.resize(rows, std::vector<Genotype>(columns, Genotype::HomozygousDominant));
     return 0;
 }
 
@@ -38,9 +38,9 @@ CA_model::CA_model(int ndims, int dim1, int dim2)
 }
 
 // Neighborhood Setup
-std::vector<Phenotype> CA_model::setup_vonneumann(int x, int y)
+std::vector<Genotype> CA_model::setup_vonneumann(int x, int y)
 {
-    std::vector<Phenotype> neighbors;
+    std::vector<Genotype> neighbors;
     std::vector<std::pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
     for (const auto &dir : directions)
@@ -90,7 +90,7 @@ int CA_model::CA_init_cond(int state, double prob)
     {
         for (int j = 0; j < columns; ++j)
         {
-            allele_data[i][j] = dist(gen) ? static_cast<Phenotype>(state) : Phenotype::HomozygousDominant;
+            allele_data[i][j] = dist(gen) ? static_cast<Genotype>(state) : Genotype::HomozygousDominant;
         }
     }
 
@@ -98,17 +98,17 @@ int CA_model::CA_init_cond(int state, double prob)
 }
 
 // Setup Rules
-void CA_model::set_straight_conditional(std::function<Phenotype(Phenotype)> rule)
+void CA_model::set_straight_conditional(std::function<Genotype(Genotype)> rule)
 {
     straight_conditional = rule;
 }
 
-void CA_model::set_conditional_neighbor(std::function<Phenotype(Phenotype, const std::vector<Phenotype> &)> rule)
+void CA_model::set_conditional_neighbor(std::function<Genotype(Genotype, const std::vector<Genotype> &)> rule)
 {
     conditional_neighbor = rule;
 }
 
-void CA_model::set_majority_rule(std::function<Phenotype(const vector<Phenotype> &)> rule)
+void CA_model::set_majority_rule(std::function<Genotype(const vector<Genotype> &)> rule)
 {
     majority_rule = rule;
 }
@@ -120,14 +120,14 @@ void CA_model::update_grid()
     int count_homozygous_recessive = 0;
     int count_heterozygous = 0;
     int count_homozygous_dominant = 0;
-    std::vector<std::vector<Phenotype>> grid = allele_data;
+    std::vector<std::vector<Genotype>> grid = allele_data;
 
     for (int i = 0; i < rows; ++i)
     {
         for (int j = 0; j < columns; ++j)
         {
-            Phenotype current_state = allele_data[i][j];
-            std::vector<Phenotype> neighbors = setup_vonneumann(i, j);
+            Genotype current_state = allele_data[i][j];
+            std::vector<Genotype> neighbors = setup_vonneumann(i, j);
 
             // Apply rules
             if (straight_conditional)
@@ -145,13 +145,13 @@ void CA_model::update_grid()
 
             switch (grid[i][j])
             {
-            case Phenotype::HomozygousRecessive:
+            case Genotype::Recessive:
                 count_homozygous_recessive++;
                 break;
-            case Phenotype::Heterozygous:
+            case Genotype::Heterozygous:
                 count_heterozygous++;
                 break;
-            case Phenotype::HomozygousDominant:
+            case Genotype::HomozygousDominant:
                 count_homozygous_dominant++;
                 break;
             }
@@ -162,5 +162,5 @@ void CA_model::update_grid()
 
     std::cout << "Homozygous Dominant: " << count_homozygous_dominant
               << ", Heterozygous: " << count_heterozygous
-              << ", Homozygous Recessive: " << count_homozygous_recessive << std::endl;
+              << ", Recessive: " << count_homozygous_recessive << std::endl;
 }
