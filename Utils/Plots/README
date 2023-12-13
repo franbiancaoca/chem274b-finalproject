@@ -7,3 +7,6 @@
 
 # This subdirectory contains relevant plots for our cellular automata model.
 
+- specific_plots.ipynb : this Jyputer notebook contains functions that create relevant Python visualizations that pertain to individuals and allele frequencies in our simulated population
+
+The subdirectory Data/ contains the output data from test_allele_freq. The text in this file gives the number of individuals of each state in each generation.

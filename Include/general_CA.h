@@ -14,14 +14,14 @@
 #include <functional>
 using namespace std;
 
-enum class Phenotype
+enum class Genotype
 {
     // Representing state of alleles
     HomozygousDominant,
     Heterozygous,
-    HomozygousRecessive
+    Recessive
 };
-using Allele = Phenotype;
+using Allele = Genotype;
 
 class CA_model
 {
@@ -47,7 +47,7 @@ public:
     CA_model(int ndims, int dim1, int dim2);
 
     // Neighborhood Setup
-    std::vector<Phenotype> setup_vonneumann(int x, int y);
+    std::vector<Genotype> setup_vonneumann(int x, int y);
 
     // Setup Genotype
     std::string setup_states(std::string state);
@@ -56,22 +56,22 @@ public:
     int CA_init_cond(int x_state, double prob);
 
     // Setup Rules
-    void set_straight_conditional(function<Phenotype(Phenotype)> rule);
-    void set_conditional_neighbor(function<Phenotype(Phenotype, const vector<Phenotype> &)> rule);
-    void set_majority_rule(function<Phenotype(const vector<Phenotype> &)> rule);
+    void set_straight_conditional(function<Genotype(Genotype)> rule);
+    void set_conditional_neighbor(function<Genotype(Genotype, const vector<Genotype> &)> rule);
+    void set_majority_rule(function<Genotype(const vector<Genotype> &)> rule);
 
     // Updates the grid based on rules
     void update_grid();
 };
 
-// Operations that determine the phenotype of the offspring
-Phenotype determine_phenotype(Phenotype parent1, Phenotype parent2);
+// Operations that determine the genotype of the offspring
+Genotype determine_genotype(Genotype parent1, Genotype parent2);
 
 // Initialization of population with a given starting allele frequency
-std::vector<Phenotype> initialize_population(int size, double recessive_frequency);
+std::vector<Genotype> initialize_population(int size, double recessive_frequency);
 
 // Simulates one generation and this is the
 // implementation of the VON NEUMAN NEIGHBORHOOD!
-std::vector<Phenotype> simulate_generation(const std::vector<Phenotype> &current_population);
+std::vector<Genotype> simulate_generation(const std::vector<Genotype> &current_population);
 
-std::function<Phenotype(Phenotype, const std::vector<Phenotype> &)> get_generation_rule();
+std::function<Genotype(Genotype, const std::vector<Genotype> &)> get_generation_rule();
