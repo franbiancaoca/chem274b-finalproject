@@ -292,147 +292,58 @@ int CellularAutomata::get_kprime() const
     return kprime;
 }
 
+// Function to be able to add rules in vector for models that utilize multiple rules
+void CellularAutomata::add_rule(RuleFunction rule)
+{
+    rules.push_back(rule);
+}
+
 // Compute function for 1-Dimension/Rule 1
 // Updates grid based on Straight Conditional
 void CellularAutomata::onedim_rule1()
 {
-    std::vector<std::vector<int>> temp_grid(rows, std::vector<int>(cols, 0));
-
-    for (int j = 0; j < cols; ++j)
+    if (dimensions == ONE_DIMENSIONAL && rule == STRAIGHT_CONDITIONAL)
     {
-        if (dimensions == ONE_DIMENSIONAL && rule == STRAIGHT_CONDITIONAL)
+        for (int j = 0; j < cols; ++j)
         {
-            // Indices to be used for left/right neighbors in 1 dimension
-            int left_neighbor_index = (j - 1 + cols) % cols;
-            int right_neighbor_index = (j + 1) % cols;
-
-            // Get current state of neighbors + current cell
-            int current_state = grid[0][j];
-            int left_neighbor = grid[0][left_neighbor_index];
-            int right_neighbor = grid[0][right_neighbor_index];
-
-            // VN NEIGHBORHOOD & PERIODIC BOUNDARIES
-            if (neighborhood == VON_NEUMANN && boundaries == PERIODIC)
+            // Directly apply rule based on current state
+            if (grid[0][j] == k)
             {
-                // If current state is k -> change to k'
-                temp_grid[0][j] = (current_state == k) ? kprime : current_state;
-            }
-
-            // VN NEIGHBORHOOD & FIXED BOUNDARIES
-            if (neighborhood == VON_NEUMANN && boundaries == FIXED)
-            {
-                // Cells at the boundaries maintain the fixed state 'k'
-                temp_grid[0][j] = (j == 0 || j == cols - 1) ? k : (current_state == k) ? kprime
-                                                                                       : current_state;
-            }
-
-            // VN NEIGHBORHOOD & NO BOUNDARIES
-            if (neighborhood == VON_NEUMANN && boundaries == NO_BOUNDARIES)
-            {
-                // Neighbors beyond the grid considered same as the current state
-                left_neighbor = (j == 0) ? current_state : grid[0][j - 1];
-                right_neighbor = (j == cols - 1) ? current_state : grid[0][j + 1];
-                temp_grid[0][j] = (current_state == k) ? kprime : current_state;
-            }
-
-            // M NEIGHBORHOOD & PERIODIC BOUNDARIES
-            if (neighborhood == MOORE && boundaries == PERIODIC)
-            {
-                // For one-dimensional, M = VM
-                temp_grid[0][j] = (current_state == k) ? kprime : current_state;
-            }
-
-            // M NEIGHBORHOOD & FIXED BOUNDARIES
-            if (neighborhood == MOORE && boundaries == FIXED)
-            {
-                // Cells at the boundaries maintain the fixed state 'k'
-                temp_grid[0][j] = (j == 0 || j == cols - 1) ? k : (current_state == k) ? kprime
-                                                                                       : current_state;
-            }
-
-            // M NEIGHBORHOOD & NO BOUNDARIES
-            if (neighborhood == MOORE && boundaries == NO_BOUNDARIES)
-            {
-                // For one-dimensional, M = VM with no boundaries
-                left_neighbor = (j == 0) ? current_state : grid[0][j - 1];
-                right_neighbor = (j == cols - 1) ? current_state : grid[0][j + 1];
-                temp_grid[0][j] = (current_state == k) ? kprime : current_state;
+                grid[0][j] = kprime; // Change state: k -> k'
             }
         }
     }
-    grid = temp_grid;
 }
 
 // Compute function for 1-Dimension/Rule 2
 // Updates grid based on Conditional Transition
+// Note: Von Neumann and Moore are the same in 1D space (left/right neighbors)
 void CellularAutomata::onedim_rule2()
 {
-    std::vector<std::vector<int>> temp_grid(rows, std::vector<int>(cols, 0));
+    std::vector<std::vector<int>> temp_grid = grid;
 
     for (int j = 0; j < cols; ++j)
     {
-        if (dimensions == ONE_DIMENSIONAL && rule == CONDITIONAL_TRANSITION)
+        int current_state = grid[0][j];
+        int left_neighbor, right_neighbor;
+
+        // PERIODIC BOUNDARIES
+        if (boundaries == PERIODIC)
         {
-            // Indices to be used for left/right neighbors in 1 dimension
-            int left_neighbor_index = (j - 1 + cols) % cols;
-            int right_neighbor_index = (j + 1) % cols;
+            left_neighbor = grid[0][(j - 1 + cols) % cols];
+            right_neighbor = grid[0][(j + 1) % cols];
+        }
+        else
+        {
+            // FIXED/NO BOUNDARIES
+            left_neighbor = (j == 0) ? ((boundaries == FIXED) ? k : current_state) : grid[0][j - 1];
+            right_neighbor = (j == cols - 1) ? ((boundaries == FIXED) ? k : current_state) : grid[0][j + 1];
+        }
 
-            // Get the current state and the neighbor's states
-            int current_state = grid[0][j];
-            int left_neighbor = grid[0][left_neighbor_index];
-            int right_neighbor = grid[0][right_neighbor_index];
-
-            // VN NEIGHBORHOOD & PERIODIC BOUNDARIES
-            if (neighborhood == VON_NEUMANN && boundaries == PERIODIC)
-            {
-                // Apply conditional transition
-                temp_grid[0][j] = (current_state == k && (left_neighbor == kprime || right_neighbor == kprime)) ? kprime : current_state;
-            }
-
-            // VN NEIGHBORHOOD & FIXED BOUNDARIES
-            if (neighborhood == VON_NEUMANN && boundaries == FIXED)
-            {
-                // Boundary cells maintain the fixed state 'k'
-                temp_grid[0][j] = (j == 0 || j == cols - 1) ? k : (current_state == k && (left_neighbor == kprime || right_neighbor == kprime)) ? kprime
-                                                                                                                                                  : current_state;
-            }
-
-            // VN NEIGHBORHOOD & NO BOUNDARIES
-            if (neighborhood == VON_NEUMANN && boundaries == NO_BOUNDARIES)
-            {
-                // No wrapping, edges have no neighbors beyond the boundary
-                left_neighbor = (j == 0) ? current_state : grid[0][j - 1];
-                right_neighbor = (j == cols - 1) ? current_state : grid[0][j + 1];
-
-                // Apply the conditional transition rule
-                temp_grid[0][j] = (current_state == k && (left_neighbor == kprime || right_neighbor == kprime)) ? kprime : current_state;
-            }
-
-            // M NEIGHBORHOOD & PERIODIC BOUNDARIES
-            if (neighborhood == MOORE && boundaries == PERIODIC)
-            {
-                // For one-dimensional, M = VM
-                temp_grid[0][j] = (current_state == k && (left_neighbor == kprime || right_neighbor == kprime)) ? kprime : current_state;
-            }
-
-            // M NEIGHBORHOOD & FIXED BOUNDARIES
-            if (neighborhood == MOORE && boundaries == FIXED)
-            {
-                // Boundary cells maintain the fixed state 'k'
-                temp_grid[0][j] = (j == 0 || j == cols - 1) ? k : (current_state == k && (left_neighbor == kprime || right_neighbor == kprime)) ? kprime
-                                                                                                                                                  : current_state;
-            }
-
-            // M NEIGHBORHOOD & NO BOUNDARIES
-            if (neighborhood == MOORE && boundaries == NO_BOUNDARIES)
-            {
-                // No wrapping, edges have no neighbors beyond the boundary
-                left_neighbor = (j == 0) ? current_state : grid[0][j - 1];
-                right_neighbor = (j == cols - 1) ? current_state : grid[0][j + 1];
-
-                // Apply conditional transition
-                temp_grid[0][j] = (current_state == k && (left_neighbor == kprime || right_neighbor == kprime)) ? kprime : current_state;
-            }
+        // Apply Conditional Transition
+        if (current_state == k && (left_neighbor == kprime || right_neighbor == kprime))
+        {
+            temp_grid[0][j] = kprime;
         }
     }
 
@@ -441,69 +352,38 @@ void CellularAutomata::onedim_rule2()
 
 // Compute function for 1-Dimension/Rule 3
 // Updates grid based on Majority Rule
+// Note: Von Neumann and Moore are the same in 1D space (left/right neighbors)
 void CellularAutomata::onedim_rule3()
 {
-    std::vector<std::vector<int>> temp_grid(rows, std::vector<int>(cols, 0));
+    // Temp_grid is the current grid
+    std::vector<std::vector<int>> temp_grid = grid;
 
     for (int j = 0; j < cols; ++j)
     {
-        if (dimensions == ONE_DIMENSIONAL && rule == MAJORITY_RULE)
+        int current_state = grid[0][j];
+        int left_neighbor, right_neighbor;
+
+        // PERIODIC BOUNDARIES
+        if (boundaries == PERIODIC)
         {
-            int current_state = grid[0][j];
-            int neighbors_sum = 0; // Sum of the states of neighboring cells
-
-            // Calculate the indices for the neighbors considering the boundaries
-            int left_neighbor_index = (j - 1 + cols) % cols;
-            int right_neighbor_index = (j + 1) % cols;
-
-            int left_neighbor = grid[0][left_neighbor_index];
-            int right_neighbor = grid[0][right_neighbor_index];
-
-            // VN NEIGHBORHOOD & PERIODIC BOUNDARIES
-            if (neighborhood == VON_NEUMANN && boundaries == PERIODIC)
-            {
-                // Sum states of the left and right neighbors
-                neighbors_sum = left_neighbor + right_neighbor;
-            }
-
-            // VN NEIGHBORHOOD & FIXED BOUNDARIES
-            if (neighborhood == VON_NEUMANN && boundaries == FIXED)
-            {
-                // Edge cells keep their original state
-                neighbors_sum = (j == 0 || j == cols - 1) ? current_state : left_neighbor + right_neighbor;
-            }
-
-            // VN NEIGHBORHOOD & NO BOUNDARIES
-            if (neighborhood == VON_NEUMANN && boundaries == NO_BOUNDARIES)
-            {
-                neighbors_sum = (j == 0 ? current_state : left_neighbor) + (j == cols - 1 ? current_state : right_neighbor);
-            }
-
-            // M NEIGHBORHOOD & PERIODIC BOUNDARIES
-            if (neighborhood == MOORE && boundaries == PERIODIC)
-            {
-                // For one-dimensional, M = VM
-                neighbors_sum = left_neighbor + right_neighbor;
-            }
-
-            // M NEIGHBORHOOD & FIXED BOUNDARIES
-            if (neighborhood == MOORE && boundaries == FIXED)
-            {
-                // Edge cells keeps original state
-                neighbors_sum = (j == 0 || j == cols - 1) ? current_state : left_neighbor + right_neighbor;
-            }
-
-            // M NEIGHBORHOOD & NO BOUNDARIES
-            if (neighborhood == MOORE && boundaries == NO_BOUNDARIES)
-            {
-                neighbors_sum = (j == 0 ? current_state : left_neighbor) + (j == cols - 1 ? current_state : right_neighbor);
-            }
-
-            // Apply majority rule: if the sum of neighbors states is greater than or equal to 1, set to 1; else, set to 0
-            temp_grid[0][j] = (neighbors_sum >= 1) ? 1 : 0;
+            left_neighbor = grid[0][(j - 1 + cols) % cols];
+            right_neighbor = grid[0][(j + 1) % cols];
         }
+        else
+        {
+            // FIXED/NO BOUNDARIES
+            left_neighbor = (j == 0) ? ((boundaries == FIXED) ? k : current_state) : grid[0][j - 1];
+            right_neighbor = (j == cols - 1) ? ((boundaries == FIXED) ? k : current_state) : grid[0][j + 1];
+        }
+
+        // Sum states of the neighbors
+        int neighbors_sum = left_neighbor + right_neighbor;
+
+        // Apply Majority Rule
+        temp_grid[0][j] = (neighbors_sum >= 1) ? 1 : 0;
     }
 
+    // Grid is the newly updated grid
     grid = temp_grid;
 }
 
@@ -511,264 +391,153 @@ void CellularAutomata::onedim_rule3()
 // Updates grid based on Straight Conditional
 void CellularAutomata::twodim_rule1()
 {
-    std::vector<std::vector<int>> temp_grid(rows, std::vector<int>(cols, 0));
-
     if (dimensions == TWO_DIMENSIONAL && rule == STRAIGHT_CONDITIONAL)
     {
         for (int i = 0; i < rows; ++i)
         {
             for (int j = 0; j < cols; ++j)
             {
-                int current_state = grid[i][j];
-
-                // Calculate indices for neighbors
-                int north = (i - 1 + rows) % rows;
-                int south = (i + 1) % rows;
-                int east = (j + 1) % cols;
-                int west = (j - 1 + cols) % cols;
-
-                // Calculate indices for diagonal neighbors (For Moore)
-                int northeast = (north * cols + east) % (rows * cols);
-                int northwest = (north * cols + west) % (rows * cols);
-                int southeast = (south * cols + east) % (rows * cols);
-                int southwest = (south * cols + west) % (rows * cols);
-
-                // VN NEIGHBORHOOD & PERIODIC BOUNDARIES
-                if (neighborhood == VON_NEUMANN && boundaries == PERIODIC)
+                // Directly apply rule based on current state
+                if (grid[i][j] == k)
                 {
-                    // If current state is k -> change to k'
-                    temp_grid[i][j] = (current_state == k) ? kprime : current_state;
-                }
-
-                // VN NEIGHBORHOOD & FIXED BOUNDARIES
-                if (neighborhood == VON_NEUMANN && boundaries == FIXED)
-                {
-                    // Cells at the edges of the grid maintain a fixed state
-                    temp_grid[i][j] = (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) ? k : (current_state == k) ? kprime
-                                                                                                                    : current_state;
-                }
-
-                // VN NEIGHBORHOOD & NO BOUNDARIES
-                if (neighborhood == VON_NEUMANN && boundaries == NO_BOUNDARIES)
-                {
-                    // In the no-boundary condition, edge cells do not wrap around
-                    temp_grid[i][j] = (current_state == k) ? kprime : current_state;
-                }
-
-                // M NEIGHBORHOOD & PERIODIC BOUNDARIES
-                if (neighborhood == MOORE && boundaries == PERIODIC)
-                {
-                    // Include diagonal neighbors for Moore neighborhood
-                    int sum_diagonals = grid[northeast / cols][northeast % cols] +
-                                        grid[northwest / cols][northwest % cols] +
-                                        grid[southeast / cols][southeast % cols] +
-                                        grid[southwest / cols][southwest % cols];
-
-                    // Apply the rule based on the sum of orthogonal and diagonal neighbors
-                    temp_grid[i][j] = (current_state == k) ? kprime : current_state; // Modify this logic as needed
-                }
-
-                // M NEIGHBORHOOD & FIXED BOUNDARIES
-                if (neighborhood == MOORE && boundaries == FIXED)
-                {
-                    // In fixed boundaries, edge and corner cells maintain a fixed state
-                    // Assuming the fixed state is 'k'
-                    if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1)
-                    {
-                        temp_grid[i][j] = k;
-                    }
-                    else
-                    {
-                        // Apply the rule for internal cells
-                        temp_grid[i][j] = (current_state == k) ? kprime : current_state;
-                    }
-                }
-
-                // M NEIGHBORHOOD & NO BOUNDARIES
-                if (neighborhood == MOORE && boundaries == NO_BOUNDARIES)
-                {
-                    // For no boundaries, treat out-of-bound indices as if they have the same state as the current cell
-                    if (i > 0 && i < rows - 1 && j > 0 && j < cols - 1)
-                    {
-                        // Apply the rule for internal cells
-                        temp_grid[i][j] = (current_state == k) ? kprime : current_state;
-                    }
-                    else
-                    {
-                        // Edge and corner cells keep their current state
-                        temp_grid[i][j] = current_state;
-                    }
+                    grid[i][j] = kprime; // Change state: k -> k'
                 }
             }
         }
     }
-    grid = temp_grid;
 }
-
-
 
 // Compute function for 2-Dimension/Rule 2
 // Updates grid based on Conditional Transition
+// Periodic Boundaries: The grid wraps around, and the neighbors of edge cells are calculated as if the grid is a torus
+// Fixed Boundaries: The edge cells use their current state or a predefined state for out-of-bound indices
+// No Boundaries: The out-of-bound indices are not wrapped around, and edge cells have fewer neighbors to consider
+// (treated as if they have the same state as the current cell or a predefined state)
 void CellularAutomata::twodim_rule2()
 {
-    std::vector<std::vector<int>> temp_grid(rows, std::vector<int>(cols, 0));
+    std::vector<std::vector<int>> temp_grid = grid;
 
-    if (dimensions == TWO_DIMENSIONAL && rule == CONDITIONAL_TRANSITION)
+    for (int i = 0; i < rows; ++i)
     {
-        for (int i = 0; i < rows; ++i)
+        for (int j = 0; j < cols; ++j)
         {
-            for (int j = 0; j < cols; ++j)
+            int current_state = grid[i][j];
+            std::vector<int> neighbors;
+
+            // Calculate indices for orthogonal neighbors (VON NEUMANN)
+            int north = (boundaries != FIXED || i > 0) ? (i - 1 + rows) % rows : i;
+            int south = (boundaries != FIXED || i < rows - 1) ? (i + 1) % rows : i;
+            int east = (boundaries != FIXED || j < cols - 1) ? (j + 1) % cols : j;
+            int west = (boundaries != FIXED || j > 0) ? (j - 1 + cols) % cols : j;
+
+            // Add orthogonal neighbors (VON NEUMANN)
+            neighbors.push_back(grid[north][j]);
+            neighbors.push_back(grid[south][j]);
+            neighbors.push_back(grid[i][east]);
+            neighbors.push_back(grid[i][west]);
+
+            // Include diagonal neighbors (IF MOORE)
+            if (neighborhood == MOORE)
             {
-                int current_state = grid[i][j];
-
-                // Calculate indices for orthogonal neighbors
-                int north = (i - 1 + rows) % rows;
-                int south = (i + 1) % rows;
-                int east = (j + 1) % cols;
-                int west = (j - 1 + cols) % cols;
-
-                // Calculate indices for diagonal neighbors (For Moore)
                 int northeast = (north * cols + east) % (rows * cols);
                 int northwest = (north * cols + west) % (rows * cols);
                 int southeast = (south * cols + east) % (rows * cols);
                 int southwest = (south * cols + west) % (rows * cols);
 
-                // Check neighbors for Von Neumann neighborhood
-                bool vn_condition = grid[north][j] == k || grid[south][j] == k ||
-                                    grid[i][east] == k || grid[i][west] == k;
+                neighbors.push_back(grid[northeast / cols][northeast % cols]);
+                neighbors.push_back(grid[northwest / cols][northwest % cols]);
+                neighbors.push_back(grid[southeast / cols][southeast % cols]);
+                neighbors.push_back(grid[southwest / cols][southwest % cols]);
+            }
 
-                // Check neighbors for Moore neighborhood
-                bool m_condition = vn_condition ||
-                                   grid[northeast / cols][northeast % cols] == k ||
-                                   grid[northwest / cols][northwest % cols] == k ||
-                                   grid[southeast / cols][southeast % cols] == k ||
-                                   grid[southwest / cols][southwest % cols] == k;
-
-                // VN NEIGHBORHOOD & PERIODIC BOUNDARIES
-                if (neighborhood == VON_NEUMANN && boundaries == PERIODIC)
+            // Apply Conditional Transition
+            bool condition_met = false;
+            for (int neighbor_state : neighbors)
+            {
+                if (neighbor_state == kprime)
                 {
-                    // Apply conditional transition
-                    temp_grid[i][j] = vn_condition ? kprime : current_state;
+                    condition_met = true;
+                    break;
                 }
+            }
 
-                // VN NEIGHBORHOOD & FIXED BOUNDARIES
-                if (neighborhood == VON_NEUMANN && boundaries == FIXED)
-                {
-                    temp_grid[i][j] = (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) ? current_state : (vn_condition ? kprime : current_state);
-                }
-
-                // VN NEIGHBORHOOD & NO BOUNDARIES
-                if (neighborhood == VON_NEUMANN && boundaries == NO_BOUNDARIES)
-                {
-                    temp_grid[i][j] = vn_condition ? kprime : current_state;
-                }
-
-                // M NEIGHBORHOOD & PERIODIC BOUNDARIES
-                if (neighborhood == MOORE && boundaries == PERIODIC)
-                {
-                    temp_grid[i][j] = m_condition ? kprime : current_state;
-                }
-
-                // M NEIGHBORHOOD & FIXED BOUNDARIES
-                if (neighborhood == MOORE && boundaries == FIXED)
-                {
-                    temp_grid[i][j] = (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) ? current_state : (m_condition ? kprime : current_state);
-                }
-
-                // M NEIGHBORHOOD & NO BOUNDARIES
-                if (neighborhood == MOORE && boundaries == NO_BOUNDARIES)
-                {
-                    temp_grid[i][j] = m_condition ? kprime : current_state;
-                }
+            if (current_state == k && condition_met)
+            {
+                temp_grid[i][j] = kprime;
             }
         }
     }
 
+    // Current grid -> updated grid
     grid = temp_grid;
 }
 
 // Compute function for 2-Dimension/Rule 3
 // Updates grid based on Majority Rule
+// For periodic boundaries, the grid wraps around
+// For fixed boundaries, edge cells assume a fixed state (k)
+// For no boundaries, edge cells are treated as having the same state as the cell itself
 void CellularAutomata::twodim_rule3()
 {
-    std::vector<std::vector<int>> temp_grid(rows, std::vector<int>(cols, 0));
+    std::vector<std::vector<int>> temp_grid = grid;
 
-    if (dimensions == TWO_DIMENSIONAL && rule == MAJORITY_RULE)
+    for (int i = 0; i < rows; ++i)
     {
-        for (int i = 0; i < rows; ++i)
+        for (int j = 0; j < cols; ++j)
         {
-            for (int j = 0; j < cols; ++j)
+            int current_state = grid[i][j];
+            int neighbors_sum = 0;
+
+            // Calculate indices for orthogonal neighbors (periodic boundaries + VN)
+            int north = (i - 1 + rows) % rows;
+            int south = (i + 1) % rows;
+            int east = (j + 1) % cols;
+            int west = (j - 1 + cols) % cols;
+
+            // Handle boundaries for orthogonal neighbors (fixed boundaries + VN)
+            north = (i == 0 && boundaries != PERIODIC) ? ((boundaries == FIXED) ? k : current_state) : north;
+            south = (i == rows - 1 && boundaries != PERIODIC) ? ((boundaries == FIXED) ? k : current_state) : south;
+            east = (j == cols - 1 && boundaries != PERIODIC) ? ((boundaries == FIXED) ? k : current_state) : east;
+            west = (j == 0 && boundaries != PERIODIC) ? ((boundaries == FIXED) ? k : current_state) : west;
+
+            // Add orthogonal neighbors to the sum
+            neighbors_sum += grid[north][j];
+            neighbors_sum += grid[south][j];
+            neighbors_sum += grid[i][east];
+            neighbors_sum += grid[i][west];
+
+            // Include diagonal neighbors for Moore neighborhood
+            if (neighborhood == MOORE)
             {
-                int current_state = grid[i][j];
-
-                // Calculate indices for orthogonal neighbors
-                int north = (i - 1 + rows) % rows;
-                int south = (i + 1) % rows;
-                int east = (j + 1) % cols;
-                int west = (j - 1 + cols) % cols;
-
-                // Calculate indices for diagonal neighbors (For Moore)
+                // Calculate indices for diagonal neighbors (periodic boundaries + M)
                 int northeast = (north * cols + east) % (rows * cols);
                 int northwest = (north * cols + west) % (rows * cols);
                 int southeast = (south * cols + east) % (rows * cols);
                 int southwest = (south * cols + west) % (rows * cols);
 
-                // Count the number of neighboring cells that are in state 1
-                int sum_neighbors = grid[north][j] + grid[south][j] +
-                                    grid[i][east] + grid[i][west];
-
-                // Include diagonal neighbors for Moore neighborhood
-                if (neighborhood == MOORE)
+                // Handle boundaries for diagonal neighbors (fixed boundaries + M)
+                if (boundaries != PERIODIC)
                 {
-                    sum_neighbors += grid[northeast / cols][northeast % cols] +
-                                     grid[northwest / cols][northwest % cols] +
-                                     grid[southeast / cols][southeast % cols] +
-                                     grid[southwest / cols][southwest % cols];
+                    northeast = ((north == i) ? i : north) * cols + ((east == j) ? j : east);
+                    northwest = ((north == i) ? i : north) * cols + ((west == j) ? j : west);
+                    southeast = ((south == i) ? i : south) * cols + ((east == j) ? j : east);
+                    southwest = ((south == i) ? i : south) * cols + ((west == j) ? j : west);
                 }
 
-                // Apply majority rule based on the sum of neighbors
-                int threshold = (neighborhood == VON_NEUMANN) ? 2 : 5;
-
-                // VM NEIGHBORHOOD & PERIODIC BOUNDARIES
-                if (neighborhood == VON_NEUMANN && boundaries == PERIODIC)
-                {
-                    temp_grid[i][j] = (sum_neighbors >= threshold) ? 1 : 0;
-                }
-
-                // VM NEIGHBORHOOD & FIXED BOUNDARIES
-                if (neighborhood == VON_NEUMANN && boundaries == FIXED)
-                {
-                    temp_grid[i][j] = (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) ? current_state : (sum_neighbors >= threshold) ? 1
-                                                                                                                                          : 0;
-                }
-
-                // VM NEIGHBORHOOD & NO BOUNDARIES
-                if (neighborhood == VON_NEUMANN && boundaries == NO_BOUNDARIES)
-                {
-                    temp_grid[i][j] = (sum_neighbors >= threshold) ? 1 : 0;
-                }
-
-                // M NEIGHBORHOOD & PERIODIC BOUNDARIES
-                if (neighborhood == MOORE && boundaries == PERIODIC)
-                {
-                    temp_grid[i][j] = (sum_neighbors >= threshold) ? 1 : 0;
-                }
-
-                // M NEIGHBORHOOD & FIXED BOUNDARIES
-                if (neighborhood == MOORE && boundaries == FIXED)
-                {
-                    temp_grid[i][j] = (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) ? current_state : (sum_neighbors >= threshold) ? 1
-                                                                                                                                          : 0;
-                }
-
-                // M NEIGHBORHOOD & NO BOUNDARIES
-                if (neighborhood == MOORE && boundaries == NO_BOUNDARIES)
-                {
-                    temp_grid[i][j] = (sum_neighbors >= threshold) ? 1 : 0;
-                }
+                neighbors_sum += grid[northeast / cols][northeast % cols];
+                neighbors_sum += grid[northwest / cols][northwest % cols];
+                neighbors_sum += grid[southeast / cols][southeast % cols];
+                neighbors_sum += grid[southwest / cols][southwest % cols];
             }
+
+            // Calculate threshold based on the neighborhood type
+            int threshold = (neighborhood == VON_NEUMANN) ? 2 : 5;
+
+            // Apply Majority Rule
+            temp_grid[i][j] = (neighbors_sum >= threshold) ? 1 : 0;
         }
     }
 
+    // Current Grid -> Updated Grid
     grid = temp_grid;
 }
