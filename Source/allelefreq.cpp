@@ -3,41 +3,31 @@
 #include <random>
 #include "general_CA.h"
 
-// RULES: Operations that determine the genotype of the offspring
-Genotype determine_genotype(Genotype parent1, Genotype parent2)
+// RULES: Operations that determine the phenotype of the offspring
+Genotype determine_phenotype(Genotype parent1, Genotype parent2)
 {
-    // If both parents are homozygous dominant, 
+    // If both parents are homozygous dominant,
     // 100% chance offspring will be homozygous dominant
     if (parent1 == Genotype::HomozygousDominant && parent2 == Genotype::HomozygousDominant)
     {
         return Genotype::HomozygousDominant;
     }
 
-    // If both parents are recessive, 
+    // If both parents are recessive,
     // 100% chance offspring will be recessive
-
-    else if (parent1 == Phenotype::HomozygousRecessive && parent2 == Phenotype::HomozygousRecessive)
-    {
-        return Phenotype::HomozygousRecessive;
-
     else if (parent1 == Genotype::Recessive && parent2 == Genotype::Recessive)
     {
         return Genotype::Recessive;
-
     }
 
-    // If one parent is homozygous dominant and other is recessive, 
+    // If one parent is homozygous dominant and other is recessive,
     // 100% chance offspring will be heterozygous
-
-    else if (parent1 == Phenotype::HomozygousDominant && parent2 == Phenotype::HomozygousRecessive)
-
     else if (parent1 == Genotype::HomozygousDominant && parent2 == Genotype::Recessive)
-
     {
         return Genotype::Heterozygous;
     }
 
-    // If both parents are heterozygous, 
+    // If both parents are heterozygous,
     // 50% chance offspring will be heterozygous, 25% homo dominant and 25% homo recessive
     else
     {
@@ -57,11 +47,7 @@ Genotype determine_genotype(Genotype parent1, Genotype parent2)
         // 25% chance offspring will be recessive
         else
         {
-
-            return Phenotype::HomozygousRecessive;
-
             return Genotype::Recessive;
-
         }
     }
 }
@@ -76,7 +62,7 @@ std::vector<Genotype> initialize_population(int size, double recessive_frequency
         if (rand_value < recessive_frequency)
         {
 
-            individual = Phenotype::HomozygousRecessive;  // Offspring is recessive
+            individual = Genotype::Recessive;  // Offspring is recessive
 
             individual = Genotype::Recessive;  // Offspring is recessive
 

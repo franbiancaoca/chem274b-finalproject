@@ -554,3 +554,38 @@ void CellularAutomata::twodim_rule3(int k, int kprime)
     // Current Grid -> Updated Grid
     grid = temp_grid;
 }
+
+int CellularAutomata::determine_genotype(int cell_state1, int cell_state2)
+{
+    // HomozygousDominant = 1, Heterozygous = 2, Recessive = 3
+
+    // If both cells are Homozygous Dominant (1)
+    if (cell_state1 == 1 && cell_state2 == 1)
+    {
+        return 1; // Still Homozygous Dominant
+    }
+    // If both cells are Recessive (3)
+    else if (cell_state1 == 3 && cell_state2 == 3)
+    {
+        return 3; // Still Recessive
+    }
+    // If one cell is Homozygous Dominant (1) and the other is Recessive (3)
+    else if ((cell_state1 == 1 && cell_state2 == 3) || (cell_state1 == 3 && cell_state2 == 1))
+    {
+        return 2; // Heterozygous
+    }
+    // If both cells are Heterozygous (2)
+    else if (cell_state1 == 2 && cell_state2 == 2)
+    {
+        // Random decision for simplicity, could be more complex
+        // 50% chance for Homozygous Dominant or Recessive
+        return (rand() % 2 == 0) ? 1 : 3;
+    }
+    // Default return for any other combination
+    else
+    {
+        // Handle the default case, perhaps return a specific value or throw an error
+        // For example, return a default value like 0
+        return 0;
+    }
+}
