@@ -115,5 +115,7 @@ class CellularAutomata
         void twodim_rule3(int k, int kprime);
 
         // 4th Rule Function for Our Specific Allele Model
+        // This function is a specific rules function for our allele model of which
+        // we were told to just include in the CA general purpose library.
         int determine_genotype(int cell_state1, int cell_state2);
 };
