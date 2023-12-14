@@ -4,11 +4,7 @@
 // This file contains the general purpose library used to
 // model cellular automata. For our case, this general purpose
 // library will be used to model allele frequency changes over
-<<<<<<< HEAD
-// generations of a population.
-=======
 // generations for a population.
->>>>>>> b7ff9340bce215a9ea38cd9bb5abb2cfd19b0043
 
 #include <iostream>
 #include <vector>
@@ -92,11 +88,7 @@ void CellularAutomata::set_grid(const std::vector<std::vector<int>> &grid)
 
 // Getter method to get dimension type of CA
 // Returns:
-<<<<<<< HEAD
 //      dimensions : The dimension type (ONE_DIMENSIONAL or TWO_DIMENSIONAL)
-=======
-//  dimensions : The dimension type (ONE_DIMENSIONAL or TWO_DIMENSIONAL)
->>>>>>> b7ff9340bce215a9ea38cd9bb5abb2cfd19b0043
 DimensionType CellularAutomata::get_dimensions() const
 {
     return dimensions;
@@ -590,55 +582,34 @@ void CellularAutomata::twodim_rule3(int k, int kprime)
 // Note: Kassady created this function but had trouble pushing it to the repo
 void CellularAutomata::update()
 {
-<<<<<<< HEAD
     // Create a temporary grid to store the updated state
     std::vector<std::vector<int>> temp_grid(rows, std::vector<int>(cols, 0));
 
     // Iterate over each cell in the grid
-=======
-    std::vector<std::vector<int>> temp_grid(rows, std::vector<int>(cols, 0));
-
->>>>>>> b7ff9340bce215a9ea38cd9bb5abb2cfd19b0043
     for (int i = 0; i < rows; ++i)
     {
         for (int j = 0; j < cols; ++j)
         {
-<<<<<<< HEAD
             // Get the states of the Von Neumann neighbors
-=======
->>>>>>> b7ff9340bce215a9ea38cd9bb5abb2cfd19b0043
             int north_state = grid[(i - 1 + rows) % rows][j];
             int south_state = grid[(i + 1) % rows][j];
             int east_state = grid[i][(j + 1) % cols];
             int west_state = grid[i][(j - 1 + cols) % cols];
 
-<<<<<<< HEAD
             // Use the determine_genotype() function to get the new state
             int new_state = determine_genotype(grid[i][j], north_state, south_state, east_state, west_state);
 
             // Update the temporary grid with the new state
-=======
-            // Call determine_genotype for each neighbor pair and decide the new state
-            // This is a simplification where we just take an average of the neighbors' influence
-            int sum_states = determine_genotype(north_state, south_state) + determine_genotype(east_state, west_state);
-            int new_state = round(static_cast<double>(sum_states) / 2.0);
-
->>>>>>> b7ff9340bce215a9ea38cd9bb5abb2cfd19b0043
             temp_grid[i][j] = new_state;
         }
     }
 
-<<<<<<< HEAD
     // Update the main grid with the new states from the temporary grid
     grid = temp_grid;
-=======
-    grid.swap(temp_grid); // Efficient way to update the main grid
->>>>>>> b7ff9340bce215a9ea38cd9bb5abb2cfd19b0043
 }
 
 // This function is a specific rules function for our allele model of which
 // we were told to just include in the CA general purpose library.
-<<<<<<< HEAD
 int CellularAutomata::determine_genotype(int cell_state, int north_state, int south_state, int east_state, int west_state)
 {
     // Collect the states into a vector for easier manipulation
@@ -678,47 +649,6 @@ int CellularAutomata::determine_genotype(int cell_state, int north_state, int so
         {
             // 25% chance to be Recessive
             return 3;
-=======
-int CellularAutomata::determine_genotype(int cell_state1, int cell_state2)
-{
-    // HomozygousDominant = 1, Heterozygous = 2, Recessive = 3
-
-    // If both cells are Homozygous Dominant (1)
-    if (cell_state1 == 1 && cell_state2 == 1)
-    {
-        return 1; // Still Homozygous Dominant
-    }
-    // If both cells are Recessive (3)
-    else if (cell_state1 == 3 && cell_state2 == 3)
-    {
-        return 3; // Still Recessive
-    }
-    // If one cell is Homozygous Dominant (1) and the other is Recessive (3)
-    else if ((cell_state1 == 1 && cell_state2 == 3) || (cell_state1 == 3 && cell_state2 == 1))
-    {
-        return 2; // Heterozygous
-    }
-    // If both cells are Heterozygous (2)
-    else if (cell_state1 == 2 && cell_state2 == 2)
-    {
-        // Random decision for offspring genotype
-        double rand_value = static_cast<double>(rand()) / RAND_MAX;
-
-        // 50% chance offspring will be heterozygous
-        if (rand_value < 0.5)
-        {
-            return 2; // Heterozygous
-        }
-        // 25% chance offspring will be homozygous dominant
-        else if (rand_value < 0.75)
-        {
-            return 1; // Homozygous Dominant
-        }
-        // 25% chance offspring will be recessive
-        else
-        {
-            return 3; // Recessive
->>>>>>> b7ff9340bce215a9ea38cd9bb5abb2cfd19b0043
         }
     }
 }
