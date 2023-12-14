@@ -212,23 +212,30 @@ void CellularAutomata::setup_neighborhood()
     {
         for (int j = 0; j < cols; ++j)
         {
-            int neighbor_north, neighbor_south, neighbor_east, neighbor_west;
+            int neighbor_north, neighbor_south, neighbor_east, neighbor_west,
+                neighbor_north_east, neighbor_south_east, neighbor_south_west, neighbor_north_west;
 
             if (neighborhood == VON_NEUMANN)
             {
                 // Von Neumann logic setup
-                neighbor_east = grid[i][(j + 1) % cols];
-                neighbor_west = grid[i][(j - 1 + cols) % cols];
                 neighbor_north = grid[(i - 1 + rows) % rows][j];
                 neighbor_south = grid[(i + 1) % rows][j];
+                neighbor_east = grid[i][(j + 1) % cols];
+                neighbor_west = grid[i][(j - 1 + cols) % cols];
             }
             else if (neighborhood == MOORE)
             {
                 // Moore logic setup
+                // Same 4 neighbors as Von Neumann
                 neighbor_north = grid[(i - 1 + rows) % rows][j];
                 neighbor_south = grid[(i + 1) % rows][j];
                 neighbor_east = grid[i][(j + 1) % cols];
                 neighbor_west = grid[i][(j - 1 + cols) % cols];
+                // 4 additional diagonal neighbors
+                neighbor_north_east = grid[(i - 1 + rows) % rows][(j + 1) % cols];
+                neighbor_south_east = grid[(i + 1) % rows][(j + 1) % cols];
+                neighbor_south_west = grid[(i + 1) % rows][(j - 1 + cols) % cols];
+                neighbor_north_west = grid[(i - 1 + rows) % rows][(j - 1 + cols) % cols];
             }
         }
     }
@@ -246,16 +253,16 @@ void CellularAutomata::setup_rule()
             if (rule == STRAIGHT_CONDITIONAL)
             {
                 // Straight conditional transition logic setup
-                int state_condition = 1; // Replace with the desired state condition
-                int new_state = 2;       // Replace with the desired new state
+                int state_condition = k; // Replace with the desired state condition
+                int new_state = kprime;       // Replace with the desired new state
                 if (grid[i][j] == state_condition)
                     grid[i][j] = new_state;
             }
             else if (rule == CONDITIONAL_TRANSITION)
             {
                 // Conditional transition rule on a neighbor logic setup
-                int state_condition = 1;         // Replace with the desired state condition
-                int neighbor_condition = 3;     // Replace with the desired neighbor condition
+                int state_condition = k;         // Replace with the desired state condition
+                int neighbor_condition = kprime;     // Replace with the desired neighbor condition
                 if (grid[i][j] == state_condition && neighbor_south == neighbor_condition)
                     grid[i][j] = neighbor_south;
             }
@@ -300,7 +307,7 @@ void CellularAutomata::add_rule(RuleFunction rule)
 
 // Compute function for 1-Dimension/Rule 1
 // Updates grid based on Straight Conditional
-void CellularAutomata::onedim_rule1()
+void CellularAutomata::onedim_rule1(int k, int kprime)
 {
     if (dimensions == ONE_DIMENSIONAL && rule == STRAIGHT_CONDITIONAL)
     {
@@ -318,7 +325,7 @@ void CellularAutomata::onedim_rule1()
 // Compute function for 1-Dimension/Rule 2
 // Updates grid based on Conditional Transition
 // Note: Von Neumann and Moore are the same in 1D space (left/right neighbors)
-void CellularAutomata::onedim_rule2()
+void CellularAutomata::onedim_rule2(int k, int kprime)
 {
     std::vector<std::vector<int>> temp_grid = grid;
 
@@ -353,7 +360,7 @@ void CellularAutomata::onedim_rule2()
 // Compute function for 1-Dimension/Rule 3
 // Updates grid based on Majority Rule
 // Note: Von Neumann and Moore are the same in 1D space (left/right neighbors)
-void CellularAutomata::onedim_rule3()
+void CellularAutomata::onedim_rule3(int k, int kprime)
 {
     // Temp_grid is the current grid
     std::vector<std::vector<int>> temp_grid = grid;
@@ -379,8 +386,11 @@ void CellularAutomata::onedim_rule3()
         // Sum states of the neighbors
         int neighbors_sum = left_neighbor + right_neighbor;
 
-        // Apply Majority Rule
-        temp_grid[0][j] = (neighbors_sum >= 1) ? 1 : 0;
+        // Apply Majority Rule: If the cell's state is k and neighbors sum >= 1, update to kprime
+        if (current_state == k)
+        {
+            temp_grid[0][j] = (neighbors_sum >= 1) ? kprime : current_state;
+        }
     }
 
     // Grid is the newly updated grid
@@ -389,7 +399,7 @@ void CellularAutomata::onedim_rule3()
 
 // Compute function for 2-Dimension/Rule 1
 // Updates grid based on Straight Conditional
-void CellularAutomata::twodim_rule1()
+void CellularAutomata::twodim_rule1(int k, int kprime)
 {
     if (dimensions == TWO_DIMENSIONAL && rule == STRAIGHT_CONDITIONAL)
     {
@@ -413,7 +423,7 @@ void CellularAutomata::twodim_rule1()
 // Fixed Boundaries: The edge cells use their current state or a predefined state for out-of-bound indices
 // No Boundaries: The out-of-bound indices are not wrapped around, and edge cells have fewer neighbors to consider
 // (treated as if they have the same state as the current cell or a predefined state)
-void CellularAutomata::twodim_rule2()
+void CellularAutomata::twodim_rule2(int k, int kprime)
 {
     std::vector<std::vector<int>> temp_grid = grid;
 
@@ -477,7 +487,7 @@ void CellularAutomata::twodim_rule2()
 // For periodic boundaries, the grid wraps around
 // For fixed boundaries, edge cells assume a fixed state (k)
 // For no boundaries, edge cells are treated as having the same state as the cell itself
-void CellularAutomata::twodim_rule3()
+void CellularAutomata::twodim_rule3(int k, int kprime)
 {
     std::vector<std::vector<int>> temp_grid = grid;
 
@@ -533,8 +543,11 @@ void CellularAutomata::twodim_rule3()
             // Calculate threshold based on the neighborhood type
             int threshold = (neighborhood == VON_NEUMANN) ? 2 : 5;
 
-            // Apply Majority Rule
-            temp_grid[i][j] = (neighbors_sum >= threshold) ? 1 : 0;
+            // Apply Majority Rule only if the cell's current state is k
+            if (current_state == k)
+            {
+                temp_grid[i][j] = (neighbors_sum >= threshold) ? kprime : current_state;
+            }
         }
     }
 

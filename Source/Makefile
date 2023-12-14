@@ -20,7 +20,7 @@ INC_DIR = ../Include
 LIB_DIR     = ../Lib
 
 # DATA_OBJS contains the current list of object files
-DATA_OBJS = allelefreq.o CA_model.o allelefreq2.o
+DATA_OBJS = allelefreq.o CA_model.o allelefreq2.o CA_library.o
 
 # DATA_LIB is the name of object library file that will contain all
 # DATA_OBJS files
@@ -36,6 +36,9 @@ allelefreq2.o: $(INC_DIR)/general_CA.h
 
 CA_model.o: $(INC_DIR)/general_CA.h	
 	$(CPP) $(CPPFLAGS) CA_model.cpp -I$(INC_DIR)
+
+CA_library.o: $(INC_DIR)/CA_library.h   
+    $(CPP) $(CPPFLAGS) CA_library.cpp -I$(INC_DIR)
 
 # The following target creates a static library (a collection of
 # linkable object files). After all the object files in DATA_OBJS have been archived
