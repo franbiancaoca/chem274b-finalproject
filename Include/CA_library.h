@@ -44,6 +44,13 @@ enum RuleType
     MAJORITY_RULE,
 };
 
+enum class Allele_Genotype
+{
+    // Representing state of alleles
+    HomozygousDominant = 1,
+    Heterzygous = 2,
+    Recessive = 3
+};
 
 class CellularAutomata
 {
@@ -106,4 +113,9 @@ class CellularAutomata
         void twodim_rule1(int k, int kprime);
         void twodim_rule2(int k, int kprime);
         void twodim_rule3(int k, int kprime);
+
+        // 4th Rule Function for Our Specific Allele Model
+        // This function is a specific rules function for our allele model of which
+        // we were told to just include in the CA general purpose library.
+        int determine_genotype(int cell_state1, int cell_state2);
 };

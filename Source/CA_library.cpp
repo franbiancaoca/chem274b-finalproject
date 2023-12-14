@@ -554,3 +554,55 @@ void CellularAutomata::twodim_rule3(int k, int kprime)
     // Current Grid -> Updated Grid
     grid = temp_grid;
 }
+
+// This function is a specific rules function for our allele model of which 
+// we were told to just include in the CA general purpose library. 
+int CellularAutomata::determine_genotype(int cell_state1, int cell_state2)
+{
+    // HomozygousDominant = 1, Heterozygous = 2, Recessive = 3
+
+    // If both cells are Homozygous Dominant (1)
+    if (cell_state1 == 1 && cell_state2 == 1)
+    {
+        return 1; // Still Homozygous Dominant
+    }
+    // If both cells are Recessive (3)
+    else if (cell_state1 == 3 && cell_state2 == 3)
+    {
+        return 3; // Still Recessive
+    }
+    // If one cell is Homozygous Dominant (1) and the other is Recessive (3)
+    else if ((cell_state1 == 1 && cell_state2 == 3) || (cell_state1 == 3 && cell_state2 == 1))
+    {
+        return 2; // Heterozygous
+    }
+    // If both cells are Heterozygous (2)
+    else if (cell_state1 == 2 && cell_state2 == 2)
+    {
+        // Random decision for offspring genotype
+        double rand_value = static_cast<double>(rand()) / RAND_MAX;
+
+        // 50% chance offspring will be heterozygous
+        if (rand_value < 0.5)
+        {
+            return 2; // Heterozygous
+        }
+        // 25% chance offspring will be homozygous dominant
+        else if (rand_value < 0.75)
+        {
+            return 1; // Homozygous Dominant
+        }
+        // 25% chance offspring will be recessive
+        else
+        {
+            return 3; // Recessive
+        }
+    }
+    // Default return for any other combination
+    else
+    {
+        // Handle the default case, perhaps return a specific value or throw an error
+        // For example, return a default value like 0
+        return 0;
+    }
+}
