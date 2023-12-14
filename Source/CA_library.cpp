@@ -10,6 +10,8 @@
 #include <vector>
 #include <random>
 #include <functional>
+#include <cstdlib>
+#include <ctime>
 #include "CA_library.h"
 
 // Default constructor
@@ -79,7 +81,7 @@ void CellularAutomata::set_states(int states)
 // Setter method to set the initial state of CA
 // Inputs:
 //      grid : The initial configuration of the CA grid
-void CellularAutomata::set_grid(const std::vector<std::vector<int>>& grid)
+void CellularAutomata::set_grid(const std::vector<std::vector<int>> &grid)
 {
     this->grid = grid;
 }
@@ -151,23 +153,44 @@ int CellularAutomata::get_states() const
 // Getter method to get the initial state of CA
 // Returns:
 //      grid : The initial configuration of the CA grid
-const std::vector<std::vector<int>>& CellularAutomata::get_grid() const
+const std::vector<std::vector<int>> &CellularAutomata::get_grid() const
 {
     return grid;
 }
 
 // Setup function to initialize the grid based on the specified dimension
+// Note: Kassady made the final changes to this function but had trouble pushing to the repo
 void CellularAutomata::setup_dimensions()
 {
+    // Seed the random number generator with the current time
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
+
     if (dimensions == ONE_DIMENSIONAL)
     {
         // 1D logic setup
         grid = std::vector<std::vector<int>>(rows, std::vector<int>(cols, 0));
+
+        // Initialize 1D grid with random states
+        for (int j = 0; j < cols; ++j)
+        {
+            int random_state = rand() % states + 1;
+            grid[0][j] = random_state;
+        }
     }
     else if (dimensions == TWO_DIMENSIONAL)
     {
         // 2D logic setup
         grid = std::vector<std::vector<int>>(rows, std::vector<int>(cols, 0));
+
+        // Initialize 2D grid with random states
+        for (int i = 0; i < rows; ++i)
+        {
+            for (int j = 0; j < cols; ++j)
+            {
+                int random_state = rand() % states + 1;
+                grid[i][j] = random_state;
+            }
+        }
     }
 }
 
@@ -254,7 +277,7 @@ void CellularAutomata::setup_rule()
             {
                 // Straight conditional transition logic setup
                 int state_condition = k; // Replace with the desired state condition
-                int new_state = kprime;       // Replace with the desired new state
+                int new_state = kprime;  // Replace with the desired new state
                 if (grid[i][j] == state_condition)
                     grid[i][j] = new_state;
             }
@@ -262,7 +285,7 @@ void CellularAutomata::setup_rule()
             {
                 // Conditional transition rule on a neighbor logic setup
                 int state_condition = k;         // Replace with the desired state condition
-                int neighbor_condition = kprime;     // Replace with the desired neighbor condition
+                int neighbor_condition = kprime; // Replace with the desired neighbor condition
                 if (grid[i][j] == state_condition && neighbor_south == neighbor_condition)
                     grid[i][j] = neighbor_south;
             }
@@ -300,9 +323,9 @@ int CellularAutomata::get_kprime() const
 }
 
 // Function to be able to add rules in vector for models that utilize multiple rules
-void CellularAutomata::add_rule(RuleFunction rule)
+void CellularAutomata::add_rule(const RuleFunction &new_rule)
 {
-    rules.push_back(rule);
+    rules.push_back(new_rule);
 }
 
 // Compute function for 1-Dimension/Rule 1
@@ -555,54 +578,111 @@ void CellularAutomata::twodim_rule3(int k, int kprime)
     grid = temp_grid;
 }
 
-// This function is a specific rules function for our allele model of which 
-// we were told to just include in the CA general purpose library. 
-int CellularAutomata::determine_genotype(int cell_state1, int cell_state2)
+// Update function to advance the CA model to the next generation
+// Note: Kassady created this function but had trouble pushing it to the repo
+void CellularAutomata::update()
 {
-    // HomozygousDominant = 1, Heterozygous = 2, Recessive = 3
+    // Create a temporary grid to store the updated state
+    std::vector<std::vector<int>> temp_grid(rows, std::vector<int>(cols, 0));
 
-    // If both cells are Homozygous Dominant (1)
-    if (cell_state1 == 1 && cell_state2 == 1)
+    // Iterate over each cell in the grid
+    for (int i = 0; i < rows; ++i)
     {
-        return 1; // Still Homozygous Dominant
-    }
-    // If both cells are Recessive (3)
-    else if (cell_state1 == 3 && cell_state2 == 3)
-    {
-        return 3; // Still Recessive
-    }
-    // If one cell is Homozygous Dominant (1) and the other is Recessive (3)
-    else if ((cell_state1 == 1 && cell_state2 == 3) || (cell_state1 == 3 && cell_state2 == 1))
-    {
-        return 2; // Heterozygous
-    }
-    // If both cells are Heterozygous (2)
-    else if (cell_state1 == 2 && cell_state2 == 2)
-    {
-        // Random decision for offspring genotype
-        double rand_value = static_cast<double>(rand()) / RAND_MAX;
+        for (int j = 0; j < cols; ++j)
+        {
+            // Get the states of the Von Neumann neighbors
+            int north_state = grid[(i - 1 + rows) % rows][j];
+            int south_state = grid[(i + 1) % rows][j];
+            int east_state = grid[i][(j + 1) % cols];
+            int west_state = grid[i][(j - 1 + cols) % cols];
 
-        // 50% chance offspring will be heterozygous
-        if (rand_value < 0.5)
-        {
-            return 2; // Heterozygous
-        }
-        // 25% chance offspring will be homozygous dominant
-        else if (rand_value < 0.75)
-        {
-            return 1; // Homozygous Dominant
-        }
-        // 25% chance offspring will be recessive
-        else
-        {
-            return 3; // Recessive
+            // Use the determine_genotype() function to get the new state
+            int new_state = determine_genotype(grid[i][j], north_state, south_state, east_state, west_state);
+
+            // Update the temporary grid with the new state
+            temp_grid[i][j] = new_state;
         }
     }
-    // Default return for any other combination
+
+    // Update the main grid with the new states from the temporary grid
+    grid = temp_grid;
+}
+
+// This function is a specific rules function for our allele model of which
+// we were told to just include in the CA general purpose library.
+int CellularAutomata::determine_genotype(int cell_state, int north_state, int south_state, int east_state, int west_state)
+{
+    // Collect the states into a vector for easier manipulation
+    std::vector<int> states = {cell_state, north_state, south_state, east_state, west_state};
+
+    // Count the occurrences of each genotype
+    int count_hom_dom = std::count(states.begin(), states.end(), 1); // Homozygous Dominant
+    int count_het = std::count(states.begin(), states.end(), 2);     // Heterozygous
+    int count_rec = std::count(states.begin(), states.end(), 3);     // Recessive
+
+    // Logic for determining the new genotype
+    if (count_hom_dom > 0)
+    {
+        // If any neighbor is Homozygous Dominant, the cell becomes Homozygous Dominant
+        return 1;
+    }
+    else if (count_rec == states.size())
+    {
+        // If all neighbors are Recessive, the cell becomes Recessive
+        return 3;
+    }
     else
     {
-        // Handle the default case, perhaps return a specific value or throw an error
-        // For example, return a default value like 0
-        return 0;
+        // Random decision for offspring genotype, weighted by the presence of neighboring genotypes
+        double rand_value = static_cast<double>(rand()) / RAND_MAX;
+        if (rand_value < 0.5)
+        {
+            // 50% chance to be Heterozygous
+            return 2;
+        }
+        else if (rand_value < 0.75)
+        {
+            // 25% chance to be Homozygous Dominant
+            return 1;
+        }
+        else
+        {
+            // 25% chance to be Recessive
+            return 3;
+        }
     }
+}
+
+// Getter function to get neighbors of cell
+std::vector<int> CellularAutomata::get_neighbors(int i, int j)
+{
+    std::vector<int> neighbors;
+
+    // Calculate indices for orthogonal neighbors (Von Neumann)
+    int north = (i == 0) ? (boundaries == PERIODIC ? rows - 1 : i) : i - 1;
+    int south = (i == rows - 1) ? (boundaries == PERIODIC ? 0 : i) : i + 1;
+    int east = (j == cols - 1) ? (boundaries == PERIODIC ? 0 : j) : j + 1;
+    int west = (j == 0) ? (boundaries == PERIODIC ? cols - 1 : j) : j - 1;
+
+    // Add orthogonal neighbors
+    neighbors.push_back(grid[north][j]);
+    neighbors.push_back(grid[south][j]);
+    neighbors.push_back(grid[i][east]);
+    neighbors.push_back(grid[i][west]);
+
+    // Include diagonal neighbors for Moore neighborhood
+    if (neighborhood == MOORE)
+    {
+        int northeast = (boundaries == PERIODIC) ? ((north + rows) % rows) * cols + (east + cols) % cols : north * cols + east;
+        int northwest = (boundaries == PERIODIC) ? ((north + rows) % rows) * cols + (west + cols) % cols : north * cols + west;
+        int southeast = (boundaries == PERIODIC) ? ((south + rows) % rows) * cols + (east + cols) % cols : south * cols + east;
+        int southwest = (boundaries == PERIODIC) ? ((south + rows) % rows) * cols + (west + cols) % cols : south * cols + west;
+
+        neighbors.push_back(grid[northeast / cols][northeast % cols]);
+        neighbors.push_back(grid[northwest / cols][northwest % cols]);
+        neighbors.push_back(grid[southeast / cols][southeast % cols]);
+        neighbors.push_back(grid[southwest / cols][southwest % cols]);
+    }
+
+    return neighbors;
 }

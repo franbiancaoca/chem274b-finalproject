@@ -13,6 +13,9 @@
 
 int main()
 {
+    // Seeding the rand()
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
+    
     // Create a model instance of the CellularAutomata class
     CellularAutomata model;
 
@@ -43,6 +46,45 @@ int main()
     // Set the appropriate numver of states for CA model
     // -> 3 since there are three genotypes (homodom, hetero, and rec)
     model.set_states(3);
+
+    // Setup the CA model based on specific configurations
+    model.setup_dimensions();
+    model.setup_boundaries();
+    model.setup_neighborhood();
+    model.setup_rule();
+
+    // Display the initial (current) state of the grid
+    std::cout << "Initial state:\n";
+    const std::vector<std::vector<int>> &current_grid = model.get_grid();
+    for (const auto &row : current_grid)
+    {
+        for (int cell_state : row)
+        {
+            std::cout << cell_state << ' ';
+        }
+
+        std::cout << '\n';
+    }
+
+    // Run the CA model for a specified number of generations
+    int num_generations = 10;
+    for (int generation = 1; generation <= num_generations; ++generation)
+    {
+        // Update model for the next generation
+        model.update();
+
+        // Display the updated state of the grid
+        std::cout << "Generation " << generation << ":\n";
+        const std::vector<std::vector<int>> &updated_grid = model.get_grid();
+        for (const auto &row : updated_grid)
+        {
+            for (int cell_state : row)
+            {
+                std::cout << cell_state << ' ';
+            }
+            std::cout << '\n';
+        }
+    }
 
     return 0;
 }

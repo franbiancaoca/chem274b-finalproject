@@ -33,6 +33,6 @@ test_allelefreq2: $(INC_DIR)/general_CA.h
 	mv test_allelefreq2 $(BIN_DIR)
 
 test_genotype: $(INC_DIR)/CA_library.h
-    $(CPP) $(CPPFLAGS) test_genotype test_genotype.cpp \
-    -I$(INC_DIR) -L$(LIB_DIR) -lcellularautomata
-    mv test_genotype $(BIN_DIR)
+	$(CPP) $(CPPFLAGS) test_genotype test_genotype.cpp \
+	-I$(INC_DIR) -L$(LIB_DIR) -lcellularautomata
+	mv test_genotype $(BIN_DIR)
