@@ -86,6 +86,7 @@ public:
     void set_k(int k_state);
     void set_kprime(int kprime_state);
     void add_rule(const RuleFunction &new_rule);
+    void set_cell_state(int row, int col, int state);
 
     // Getter methods for CA attributes
     DimensionType get_dimensions() const;
@@ -121,5 +122,5 @@ public:
     // 4th Rule Function for Our Specific Allele Model
     // This function is a specific rules function for our allele model of which
     // we were told to just include in the CA general purpose library.
-    int determine_genotype(int cell_state, int north_state, int south_state, int east_state, int west_state);
+    int determine_genotype(int cell_state1, int cell_state2);
 };

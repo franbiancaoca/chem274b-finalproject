@@ -53,6 +53,40 @@ int main()
     model.setup_neighborhood();
     model.setup_rule();
 
+    // Ask user for the starting frequency of the recessive allele
+    double recessive_frequency;
+    std::cout << "Enter the starting frequency of the recessive allele (0 to 1): ";
+    std::cin >> recessive_frequency;
+
+    // Check if input is within the correct range
+    if (recessive_frequency < 0.0 || recessive_frequency > 1.0)
+    {
+        std::cerr << "Frequency must be between 0 and 1." << std::endl;
+        return 1; // Exit with error code
+    }
+
+    // Convert the frequency to a probability threshold for easier comparison
+    int recessive_threshold = static_cast<int>(recessive_frequency * RAND_MAX);
+
+    // Modify the grid based on the recessive frequency
+    for (int i = 0; i < model.get_grid_rows(); ++i)
+    {
+        for (int j = 0; j < model.get_grid_cols(); ++j)
+        {
+            // Generate a random number and compare it to the threshold
+            if (std::rand() < recessive_threshold)
+            {
+                // If the random number is less than the threshold, set the cell to recessive
+                model.set_cell_state(i, j, 3); // Assuming there is a function to set the state of a cell
+            }
+            else
+            {
+                // Otherwise, randomly assign a dominant or heterozygous state
+                model.set_cell_state(i, j, (std::rand() % 2) + 1); // 1 or 2
+            }
+        }
+    }
+
     // Display the initial (current) state of the grid
     std::cout << "Initial state:\n";
     const std::vector<std::vector<int>> &current_grid = model.get_grid();
