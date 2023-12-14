@@ -100,10 +100,10 @@ class CellularAutomata
         void setup_rule();
 
         // Compute Functions
-        void onedim_rule1();
-        void onedim_rule2();
-        void onedim_rule3();
-        void twodim_rule1();
-        void twodim_rule2();
-        void twodim_rule3();
+        void onedim_rule1(int k, int kprime);
+        void onedim_rule2(int k, int kprime);
+        void onedim_rule3(int k, int kprime);
+        void twodim_rule1(int k, int kprime);
+        void twodim_rule2(int k, int kprime);
+        void twodim_rule3(int k, int kprime);
 };
