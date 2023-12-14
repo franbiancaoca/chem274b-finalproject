@@ -685,8 +685,6 @@ std::vector<int> CellularAutomata::get_neighbors(int i, int j)
     }
 
     return neighbors;
-<<<<<<< HEAD
-=======
 }
 
 // Function responsible for setting state of a cell
@@ -700,5 +698,4 @@ void CellularAutomata::set_cell_state(int row, int col, int state)
     {
         std::cerr << "Error: Index out of bounds while trying to set cell state." << std::endl;
     }
->>>>>>> b7ff9340bce215a9ea38cd9bb5abb2cfd19b0043
 }
