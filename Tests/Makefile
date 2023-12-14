@@ -9,7 +9,7 @@
 # the ../Bin subdirectory
 
 # GNU C++ Compiler
-CPP         = g++      
+CPP         = g++   
 
 # compiler flags -g debug, -O2 optimized version -c create a library object
 CPPFLAGS    = -O3 -std=c++11 -o
@@ -31,3 +31,8 @@ test_allelefreq2: $(INC_DIR)/general_CA.h
 	$(CPP) $(CPPFLAGS) test_allelefreq2 test_allelefreq2.cpp \
 	-I$(INC_DIR) -L$(LIB_DIR) -lcellularautomata
 	mv test_allelefreq2 $(BIN_DIR)
+
+test_genotype: $(INC_DIR)/CA_library.h
+	$(CPP) $(CPPFLAGS) test_genotype test_genotype.cpp \
+	-I$(INC_DIR) -L$(LIB_DIR) -lcellularautomata
+	mv test_genotype $(BIN_DIR)
