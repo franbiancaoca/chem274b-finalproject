@@ -88,7 +88,7 @@ void CellularAutomata::set_grid(const std::vector<std::vector<int>> &grid)
 
 // Getter method to get dimension type of CA
 // Returns:
-//  dimensions : The dimension type (ONE_DIMENSIONAL or TWO_DIMENSIONAL)
+//      dimensions : The dimension type (ONE_DIMENSIONAL or TWO_DIMENSIONAL)
 DimensionType CellularAutomata::get_dimensions() const
 {
     return dimensions;
@@ -582,70 +582,73 @@ void CellularAutomata::twodim_rule3(int k, int kprime)
 // Note: Kassady created this function but had trouble pushing it to the repo
 void CellularAutomata::update()
 {
+    // Create a temporary grid to store the updated state
     std::vector<std::vector<int>> temp_grid(rows, std::vector<int>(cols, 0));
 
+    // Iterate over each cell in the grid
     for (int i = 0; i < rows; ++i)
     {
         for (int j = 0; j < cols; ++j)
         {
+            // Get the states of the Von Neumann neighbors
             int north_state = grid[(i - 1 + rows) % rows][j];
             int south_state = grid[(i + 1) % rows][j];
             int east_state = grid[i][(j + 1) % cols];
             int west_state = grid[i][(j - 1 + cols) % cols];
 
-            // Call determine_genotype for each neighbor pair and decide the new state
-            // This is a simplification where we just take an average of the neighbors' influence
-            int sum_states = determine_genotype(north_state, south_state) + determine_genotype(east_state, west_state);
-            int new_state = round(static_cast<double>(sum_states) / 2.0);
+            // Use the determine_genotype() function to get the new state
+            int new_state = determine_genotype(grid[i][j], north_state, south_state, east_state, west_state);
 
+            // Update the temporary grid with the new state
             temp_grid[i][j] = new_state;
         }
     }
 
-    grid.swap(temp_grid); // Efficient way to update the main grid
+    // Update the main grid with the new states from the temporary grid
+    grid = temp_grid;
 }
 
 // This function is a specific rules function for our allele model of which
 // we were told to just include in the CA general purpose library.
-int CellularAutomata::determine_genotype(int cell_state1, int cell_state2)
+int CellularAutomata::determine_genotype(int cell_state, int north_state, int south_state, int east_state, int west_state)
 {
-    // HomozygousDominant = 1, Heterozygous = 2, Recessive = 3
+    // Collect the states into a vector for easier manipulation
+    std::vector<int> states = {cell_state, north_state, south_state, east_state, west_state};
 
-    // If both cells are Homozygous Dominant (1)
-    if (cell_state1 == 1 && cell_state2 == 1)
+    // Count the occurrences of each genotype
+    int count_hom_dom = std::count(states.begin(), states.end(), 1); // Homozygous Dominant
+    int count_het = std::count(states.begin(), states.end(), 2);     // Heterozygous
+    int count_rec = std::count(states.begin(), states.end(), 3);     // Recessive
+
+    // Logic for determining the new genotype
+    if (count_hom_dom > 0)
     {
-        return 1; // Still Homozygous Dominant
+        // If any neighbor is Homozygous Dominant, the cell becomes Homozygous Dominant
+        return 1;
     }
-    // If both cells are Recessive (3)
-    else if (cell_state1 == 3 && cell_state2 == 3)
+    else if (count_rec == states.size())
     {
-        return 3; // Still Recessive
+        // If all neighbors are Recessive, the cell becomes Recessive
+        return 3;
     }
-    // If one cell is Homozygous Dominant (1) and the other is Recessive (3)
-    else if ((cell_state1 == 1 && cell_state2 == 3) || (cell_state1 == 3 && cell_state2 == 1))
+    else
     {
-        return 2; // Heterozygous
-    }
-    // If both cells are Heterozygous (2)
-    else if (cell_state1 == 2 && cell_state2 == 2)
-    {
-        // Random decision for offspring genotype
+        // Random decision for offspring genotype, weighted by the presence of neighboring genotypes
         double rand_value = static_cast<double>(rand()) / RAND_MAX;
-
-        // 50% chance offspring will be heterozygous
         if (rand_value < 0.5)
         {
-            return 2; // Heterozygous
+            // 50% chance to be Heterozygous
+            return 2;
         }
-        // 25% chance offspring will be homozygous dominant
         else if (rand_value < 0.75)
         {
-            return 1; // Homozygous Dominant
+            // 25% chance to be Homozygous Dominant
+            return 1;
         }
-        // 25% chance offspring will be recessive
         else
         {
-            return 3; // Recessive
+            // 25% chance to be Recessive
+            return 3;
         }
     }
 }
@@ -682,6 +685,8 @@ std::vector<int> CellularAutomata::get_neighbors(int i, int j)
     }
 
     return neighbors;
+<<<<<<< HEAD
+=======
 }
 
 // Function responsible for setting state of a cell
@@ -695,4 +700,5 @@ void CellularAutomata::set_cell_state(int row, int col, int state)
     {
         std::cerr << "Error: Index out of bounds while trying to set cell state." << std::endl;
     }
+>>>>>>> b7ff9340bce215a9ea38cd9bb5abb2cfd19b0043
 }
