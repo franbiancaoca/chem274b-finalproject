@@ -111,7 +111,7 @@ int main()
     }
 
     // Run the CA model for a specified number of generations
-    int num_generations = 50;
+    int num_generations = 100;
     for (int generation = 1; generation <= num_generations; ++generation)
     {
         // Update model for the next generation
