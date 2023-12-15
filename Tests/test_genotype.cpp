@@ -6,6 +6,7 @@
 // a population.
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <random>
 #include <functional>
@@ -87,38 +88,52 @@ int main()
         }
     }
 
+    // Open file to write results to
+    std::ofstream output_file("simulation_output.txt");
+    // Check to make sure file is open, exit with error code if not
+    if (!output_file.is_open())
+    {
+        std::cerr << "Error opening simulation_output.txt for writing." << std::endl;
+        return 1;
+    }
+
     // Display the initial (current) state of the grid
-    std::cout << "Initial state:\n";
+    output_file << "Initial state:\n";
     const std::vector<std::vector<int>> &current_grid = model.get_grid();
     for (const auto &row : current_grid)
     {
         for (int cell_state : row)
         {
-            std::cout << cell_state << ' ';
+            output_file << cell_state << ' ';
         }
 
-        std::cout << '\n';
+        output_file << '\n';
     }
 
     // Run the CA model for a specified number of generations
-    int num_generations = 10;
+    int num_generations = 50;
     for (int generation = 1; generation <= num_generations; ++generation)
     {
         // Update model for the next generation
         model.update();
 
         // Display the updated state of the grid
-        std::cout << "Generation " << generation << ":\n";
+        output_file << "Generation " << generation << ":\n";
         const std::vector<std::vector<int>> &updated_grid = model.get_grid();
         for (const auto &row : updated_grid)
         {
             for (int cell_state : row)
             {
-                std::cout << cell_state << ' ';
+                output_file << cell_state << ' ';
             }
-            std::cout << '\n';
+            output_file << '\n';
         }
     }
+    
+    // Close output file
+    output_file.close();
+
+    std::cout << "Simulation results have been written to simulation_output.txt" << std::endl;
 
     return 0;
 }
