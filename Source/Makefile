@@ -20,7 +20,7 @@ INC_DIR = ../Include
 LIB_DIR     = ../Lib
 
 # DATA_OBJS contains the current list of object files
-DATA_OBJS = allelefreq.o CA_library.o
+DATA_OBJS = CA_library.o
 
 # DATA_LIB is the name of object library file that will contain all
 # DATA_OBJS files
@@ -28,9 +28,6 @@ DATA_LIB = libcellularautomata.a
 
 # Use object files build a library object file.
 # Compilation and creation of object file for adjacency list class
-allelefreq.o: $(INC_DIR)/general_CA.h
-	$(CPP) $(CPPFLAGS) allelefreq.cpp -I$(INC_DIR)
-
 CA_library.o: $(INC_DIR)/CA_library.h
 	$(CPP) $(CPPFLAGS) CA_library.cpp -I$(INC_DIR)
 
