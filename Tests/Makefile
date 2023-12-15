@@ -22,16 +22,6 @@ LIB_DIR     = ../Lib
 BIN_DIR     = ../Bin
 
 # Tests the allele frequency model
-test_allelefreq: $(INC_DIR)/general_CA.h
-	$(CPP) $(CPPFLAGS) test_allelefreq test_allelefreq.cpp \
-	-I$(INC_DIR) -L$(LIB_DIR) -lcellularautomata
-	mv test_allelefreq $(BIN_DIR)
-
-test_allelefreq2: $(INC_DIR)/general_CA.h
-	$(CPP) $(CPPFLAGS) test_allelefreq2 test_allelefreq2.cpp \
-	-I$(INC_DIR) -L$(LIB_DIR) -lcellularautomata
-	mv test_allelefreq2 $(BIN_DIR)
-
 test_genotype: $(INC_DIR)/CA_library.h
 	$(CPP) $(CPPFLAGS) test_genotype test_genotype.cpp \
 	-I$(INC_DIR) -L$(LIB_DIR) -lcellularautomata
