@@ -8,11 +8,9 @@
 # This makefile produces the simulation output of test for our allele frequency cellular automata model.
 
 # The directory where all data for plotting is stored.
-DATA_DIR = ../Plots/Data
+DATA_DIR = ../Utils/Plots/Data
 
-
-test_target:
-	@echo only a little ways to go
-
+# This target creates the simulation output file and moves it to the data directory
 test_genotype:
 	./test_genotype
+	mv simulation_output.txt $(DATA_DIR)
