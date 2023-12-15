@@ -10,4 +10,4 @@
 List of Files in this Direcotry: 
 - README: (this file)
 - CA_library.h: API for users to set up and compute a specific model of cellular automata, which also
-    generates an output. 
+    generates an output.

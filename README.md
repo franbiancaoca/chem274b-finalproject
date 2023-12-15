@@ -1,30 +1,33 @@
-# CHEM 274B: Software Engineering Fundamentals for Molecular Sciences
-# This repository contains the final project by Kassady Marasigan, Francine Bianca Oca and Korede Ogundele
+# Chem 274B: Software Engineering Fundamentals for
+#            Molecular Sciences 
+# University of California, Berkeley
+# December 2023
 
-## In this project we implemented two cellular automata (CA) models: one general purpose and one specifically applied to an allele frequency model.
+# Creator:  Francine Bianca Oca, Kassady Marasigan, Korede Ogundele
+# Date Created: December 13th, 2023
+#
+# Directory Path: Root/
 
-### Subdirectories in this repository are:
+This is the main directory for the CHEM 274B Final Project
 
-- Bin/
-This directory contains test executables from our general purpose CA model and our allele frequency CA model.
+The directory structure is as follows:
 
-- Include/
-This directory contains header files for both CA models.
+LIST OF SUBDIRECTORIES IN THIS DIRECTORY:
+- Bin/ : This subdirectory contains all the executable program (test program)
+	
+- Lib/ : This subdirectory contains all library object files (.a)
+		
+- Include/ : This directory contains all the APIs in the form of  
+        function prototypes stored in .h include files
+		
+- Source/ : This directory contains all the source code for our general purpose library. (C++ Implementations)
+		
+- Tests/ : Test programs used to test the general purpose library to model change in allele frequencies.
+		
+- Utils: Contains all the source files that implement plotting utilities
 
-- Lib/
-This directory contains our compiled library objects.
+LIST OF FILES IN THIS DIRECTORY:
+- README:(is this file) 
 
-- Source/
-This directory contains both cellular automata models and their implementations, including all input and compute functions.
-
-- Tests/
-The Test directory contains tests for the input and compute functions of both CA models.
-
-- Utils/
-This directory contains all plotting functions and data, including outputs from our compute functions
-
-- Utils/Plots/
-The Plots subdirectory contains all plotting functions. Unlike the rest of this repository, these are written in Python and displayed in a Jupyter Notebook. The output plots are also saved as .png and present within this repository. Please view the README of this directory for a more detailed description of each file.
-
-- Utils/Plots/Data
-Finally, this repository contains all data used by plotting functions. These are outputs from our compute functions that detail number of individuals of each state, changes in the cellular automata grid from step to step, and more.
+- Makefile: Makefile with global make command. See the Makefile
+        for possible 'make commands' from this directory level.
